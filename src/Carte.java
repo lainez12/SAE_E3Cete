@@ -1,3 +1,4 @@
+
 /**
  * La classe Carte représente une carte possèdant une figure répétée un certain nombre de fois avec une texture et une couleur.
  * On a besoin de connaître :
@@ -7,6 +8,10 @@
  * - La texture de la figure.
  */
 public class Carte  {
+    private Figure figure;
+    private int nbFigure;
+    private Couleur couleur;
+    private Texture texture;
 
     /**
      * Pre-requis : nbFigures > 0
@@ -15,7 +20,10 @@ public class Carte  {
      */
 
     public Carte(Couleur couleur, int nbFigures, Figure figure, Texture texture) {
-
+        this.figure = figure;
+        this.couleur = couleur;
+        this.nbFigure = nbFigures;
+        this.texture = texture;
     }
 
     /**
@@ -23,7 +31,7 @@ public class Carte  {
      */
 
     public int getNbFigures() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.nbFigure;
     }
 
     /**
@@ -31,7 +39,7 @@ public class Carte  {
      */
 
     public Figure getFigure() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.figure;
     }
 
     /**
@@ -39,7 +47,7 @@ public class Carte  {
      */
 
     public Couleur getCouleur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.couleur;
     }
 
     /**
@@ -47,7 +55,7 @@ public class Carte  {
      */
 
     public Texture getTexture() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.texture;
     }
 
     /**
@@ -70,7 +78,22 @@ public class Carte  {
      */
 
     public int compareTo(Carte carte) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        if (cartesEgaux(carte)){
+            return 0;
+        } else if (!carteSup(carte)) {
+            return 1;
+        } else return -1;
+    }
+
+    public boolean cartesEgaux(Carte carte){
+        return this.couleur == carte.couleur && this.nbFigure == carte.nbFigure && this.figure == carte.figure && this.texture == carte.texture;
+    }
+
+    public boolean carteSup(Carte carte){
+        if (this.couleur.ordinal() < carte.couleur.ordinal()){
+            return true;
+        }
+        return this.nbFigure < carte.nbFigure && this.figure.ordinal() < carte.figure.ordinal() && this.texture.ordinal() < carte.texture.ordinal();
     }
 
     /**
@@ -83,7 +106,19 @@ public class Carte  {
 
     @Override
     public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return "" + this.couleur + this.nbFigure + "-" + this.figure + "-"+ this.texture.getAbreviation();
+    }
+
+    public String formeCarte(){
+        StringBuilder figure = new StringBuilder(" ");
+        StringBuilder borde = new StringBuilder("--");
+        for (int i = 0; i < this.nbFigure; i++) {
+            figure.append(this.figure + " ");
+        }
+        for (int i = 0; i < figure.length(); i++) {
+            borde.append("-");
+        }
+        return "" + this.couleur + borde + "\n|" + figure + "|\n|" +this.texture + " |" + "\n" + borde;
     }
 
 }
