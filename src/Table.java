@@ -16,6 +16,10 @@
  */
 public class Table {
 
+    Carte[] table;
+    int hauteur = 0;
+    int larguer = 0;
+
     /**
      * Pre-requis : hauteur >=3, largeur >=3
      *
@@ -25,7 +29,9 @@ public class Table {
      */
 
     public Table(int hauteur, int largeur){
-
+        this.table = new Carte[hauteur*largeur];
+        this.larguer = largeur;
+        this.hauteur = hauteur;
     }
 
     /**
@@ -33,7 +39,7 @@ public class Table {
      */
 
     public int getTaille() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.larguer*this.hauteur;
     }
 
     /**
@@ -44,7 +50,15 @@ public class Table {
      */
 
     public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        StringBuilder table = new StringBuilder();
+        for (int i = 0; i < this.table.length; i++) {
+            table.append(this.table[i]);
+            if (i !=0 && i%larguer == 0){
+                table.append("\n");
+            }
+        }
+
+        return table.toString();
     }
 
     /**
