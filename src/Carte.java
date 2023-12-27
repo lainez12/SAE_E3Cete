@@ -8,9 +8,9 @@
  * - La texture de la figure.
  */
 public class Carte  {
-    private Figure figure;
-    private int nbFigure;
     private Couleur couleur;
+    private int nbFigure;
+    private Figure figure;
     private Texture texture;
 
     /**
@@ -20,9 +20,9 @@ public class Carte  {
      */
 
     public Carte(Couleur couleur, int nbFigures, Figure figure, Texture texture) {
-        this.figure = figure;
         this.couleur = couleur;
         this.nbFigure = nbFigures;
+        this.figure = figure;
         this.texture = texture;
     }
 

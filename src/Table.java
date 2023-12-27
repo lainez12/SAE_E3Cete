@@ -16,9 +16,11 @@
  */
 public class Table {
 
-    Carte[] table;
-    int hauteur = 0;
-    int larguer = 0;
+    private Carte[] table;
+    private int hauteur = 0;
+    private int larguer = 0;
+
+    private int nbCartes;
 
     /**
      * Pre-requis : hauteur >=3, largeur >=3
@@ -29,9 +31,10 @@ public class Table {
      */
 
     public Table(int hauteur, int largeur){
-        this.table = new Carte[hauteur*largeur];
         this.larguer = largeur;
         this.hauteur = hauteur;
+        this.table = new Carte[this.getTaille()];
+        this.nbCartes = largeur*hauteur;
     }
 
     /**
@@ -65,7 +68,11 @@ public class Table {
      * Résullat : Vrai la carte située aux coordonnées précisées en paramètre est une carte possible pour la table.
      */
     public boolean carteExiste(Coordonnees coordonnees) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        if (!(coordonnees.getLigne() <= this.hauteur) || !(coordonnees.getColonne() <= this.larguer)){
+            System.out.println("La carte n'est pas dans la table");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -80,7 +87,27 @@ public class Table {
      */
 
     public int faireSelectionneUneCarte() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 1,1)");
+        String input;
+        Coordonnees carteCoordonnes;
+        do {
+             input = Ut.saisirChaine();
+            carteCoordonnes =  new Coordonnees(input);
+        } while (!Coordonnees.formatEstValide(input) && carteExiste(carteCoordonnes));
+
+        return numCarte(carteCoordonnes);
+    }
+
+    //PR: Carte Exite dans la table; Action : retourne le nombre de carte dans le tableu de this
+    public int numCarte(Coordonnees c){
+        int numCarte = 0;
+        if (c.getLigne() > 0){
+            numCarte = c.getLigne()-1;
+        } else {
+            numCarte = c.getLigne();
+        }
+        numCarte += c.getColonne();
+        return numCarte;
     }
 
     /**
@@ -91,7 +118,28 @@ public class Table {
      */
 
     public int[] selectionnerCartesJoueur(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int numCarte;
+        int compteurCartes = 0;
+        System.out.println("Combien des cartes allez vous selectioner?");
+        int cartesSelectioner = Ut.saisirEntier();
+        int[] cartesJouer = new int[cartesSelectioner];
+        do {
+            numCarte = faireSelectionneUneCarte();
+            if (!doublons(numCarte,compteurCartes,cartesJouer)){
+                cartesJouer[compteurCartes] = numCarte;
+            }
+            compteurCartes++;
+        } while (!(compteurCartes == cartesSelectioner));
+        return cartesJouer;
+    }
+
+    public boolean doublons(int numCarte, int compteur, int[] cartes){
+        for (int i = 0; i < compteur; i++) {
+            if (cartes[i] == numCarte){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
