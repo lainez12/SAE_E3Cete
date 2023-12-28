@@ -20,8 +20,6 @@ public class Table {
     private int hauteur = 0;
     private int larguer = 0;
 
-    private int nbCartes;
-
     /**
      * Pre-requis : hauteur >=3, largeur >=3
      *
@@ -34,8 +32,9 @@ public class Table {
         this.larguer = largeur;
         this.hauteur = hauteur;
         this.table = new Carte[this.getTaille()];
-        this.nbCartes = largeur*hauteur;
     }
+
+
 
     /**
      * Résullat : Le nombre de cartes que la table peut stocker.
@@ -121,15 +120,14 @@ public class Table {
         int numCarte;
         int compteurCartes = 0;
         System.out.println("Combien des cartes allez vous selectioner?");
-        int cartesSelectioner = Ut.saisirEntier();
-        int[] cartesJouer = new int[cartesSelectioner];
+        int[] cartesJouer = new int[nbCartes];
         do {
             numCarte = faireSelectionneUneCarte();
             if (!doublons(numCarte,compteurCartes,cartesJouer)){
                 cartesJouer[compteurCartes] = numCarte;
             }
             compteurCartes++;
-        } while (!(compteurCartes == cartesSelectioner));
+        } while (!(compteurCartes == nbCartes));
         return cartesJouer;
     }
 
@@ -142,6 +140,15 @@ public class Table {
         return false;
     }
 
+    //PR: cartes.length <= nbCartes possibles de stocker dans la table
+    public void placeCartes(Carte[] cartes){
+        for (int i = 0; i < cartes.length; i++){
+            if (this.table[i] == null){
+                this.table[i] = cartes[i];
+            }
+        }
+    }
+
     /**
      * Action : Affiche les cartes de la table correspondantes aux numéros de cartes contenus dans selection
      * Exemple de format d'affichage : "Sélection : 2-O-H 3-O-H 2-C-H"
@@ -149,7 +156,13 @@ public class Table {
      */
 
     public void afficherSelection(int[] selection) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        for (int i = 0; i < selection.length; i++) {
+            System.out.print(this.table[selection[i]] + " ");
+        }
+    }
+
+    public Carte getCarte(int numCarte){
+        return this.table[numCarte];
     }
 
 }

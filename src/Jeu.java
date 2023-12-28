@@ -25,6 +25,10 @@
  * - De quoi stocker le score du joueur (humain ou ordinateur).
  */
 public class Jeu {
+    private Paquet paq;
+    private Table tab;
+    private int score;
+    private int score2;
 
     /**
      * Action :
@@ -33,7 +37,10 @@ public class Jeu {
      */
 
     public Jeu() {
-
+        this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
+        this.tab = new Table(3, 3);
+        this.score = 0;
+        this.score2 = 0;
     }
 
     /**
@@ -42,7 +49,8 @@ public class Jeu {
      */
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
-
+        Carte[] cartesPioches = this.paq.piocher(numerosDeCartes.length);
+        this.tab.placeCartes(cartesPioches);
     }
 
     /**
@@ -50,7 +58,10 @@ public class Jeu {
      */
 
     public void resetJeu() {
-
+        this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
+        this.tab = new Table(3, 3);
+        this.score2 = 0;
+        this.score = 0;
     }
 
     /**
@@ -58,9 +69,50 @@ public class Jeu {
      */
 
     public static boolean estUnE3C(Carte[] cartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Carte c1 = cartes[0];
+        Carte c2 = cartes[1];
+        Carte c3 = cartes[2];
+        if (memeAttributs(1,c1,c2,c3)){
+            return diffAttributs(2,c1,c2,c3) && diffAttributs(3,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
+        } else if (memeAttributs(2,c1,c2,c3) && memeAttributs(4,c1,c2,c3)) {
+            return diffAttributs(1,c1,c2,c3) && diffAttributs(3,c1,c2,c3);
+        } else if (memeAttributs(3,c1,c2,c3)) {
+            return diffAttributs(1,c1,c2,c3) && diffAttributs(2,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
+        } else {
+            return diffAttributs(1,c1,c2,c3) && diffAttributs(2,c1,c2,c3) && diffAttributs(3,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
+        }
+
     }
 
+    public static boolean memeAttributs(int attribut, Carte c1, Carte c2, Carte c3){
+        switch (attribut){
+            case 1:
+                return c1.getCouleur() == c2.getCouleur() && c2.getCouleur() == c3.getCouleur() && c3.getCouleur() == c1.getCouleur();
+            case 2:
+                return c1.getNbFigures() == c2.getNbFigures() && c2.getNbFigures() == c3.getNbFigures() && c3.getNbFigures() == c1.getNbFigures();
+            case 3:
+                return c1.getFigure() == c2.getFigure() && c2.getFigure() == c3.getFigure() && c3.getFigure() == c1.getFigure();
+            case 4:
+                return c1.getTexture() == c2.getTexture() && c2.getTexture() == c3.getTexture() && c3.getTexture() == c1.getTexture();
+            default:
+                return c1.compareTo(c2) == c2.compareTo(c3);
+        }
+    }
+
+    public static boolean diffAttributs(int attribut, Carte c1, Carte c2, Carte c3){
+        switch (attribut){
+            case 1:
+                return c1.getCouleur() != c2.getCouleur() && c2.getCouleur() != c3.getCouleur() && c3.getCouleur() != c1.getCouleur();
+            case 2:
+                return c1.getNbFigures() != c2.getNbFigures() && c2.getNbFigures() != c3.getNbFigures() && c3.getNbFigures() != c1.getNbFigures();
+            case 3:
+                return c1.getFigure() != c2.getFigure() && c2.getFigure() != c3.getFigure() && c3.getFigure() != c1.getFigure();
+            case 4:
+                return c1.getTexture() != c2.getTexture() && c2.getTexture() != c3.getTexture() && c3.getTexture() != c1.getTexture();
+            default:
+                return c1.compareTo(c2) != c2.compareTo(c3);
+        }
+    }
     /**
      * Action : Recherche un E3C parmi les cartes disposées sur la table.
      * Résullat :
@@ -69,7 +121,17 @@ public class Jeu {
      */
 
     public int[] chercherE3CSurTableOrdinateur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        for (int i = 0; i < tab.getTaille(); i++) {
+            for (int j = 0; j < tab.getTaille(); j++) {
+                for (int k = 0; k < tab.getTaille(); k++) {
+                    Carte[] cartes = new Carte[]{tab.getCarte(i),tab.getCarte(j),tab.getCarte(k)};
+                    if (estUnE3C(cartes)){
+                        return new int[]{i,j,k};
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -79,7 +141,13 @@ public class Jeu {
      */
 
     public int[] selectionAleatoireDeCartesOrdinateur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int i,j,k;
+        do {
+            i = Ut.randomMinMax(0,tab.getTaille()-1);
+            j = Ut.randomMinMax(0,tab.getTaille()-1);
+            k = Ut.randomMinMax(0,tab.getTaille()-1);
+        } while (i != j && j != k && i != k);
+        return new int[]{i,j,k};
     }
 
     /**

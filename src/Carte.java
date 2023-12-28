@@ -86,14 +86,20 @@ public class Carte  {
     }
 
     public boolean cartesEgaux(Carte carte){
-        return this.couleur == carte.couleur && this.nbFigure == carte.nbFigure && this.figure == carte.figure && this.texture == carte.texture;
+        return this.couleur.ordinal() == carte.couleur.ordinal() && this.nbFigure == carte.nbFigure && this.figure.ordinal() == carte.figure.ordinal() && this.texture.ordinal() == carte.texture.ordinal();
     }
 
     public boolean carteSup(Carte carte){
-        if (this.couleur.ordinal() < carte.couleur.ordinal()){
-            return true;
+        if (this.couleur.ordinal() != carte.couleur.ordinal()){
+            return this.couleur.ordinal() < carte.couleur.ordinal();
         }
-        return this.nbFigure < carte.nbFigure && this.figure.ordinal() < carte.figure.ordinal() && this.texture.ordinal() < carte.texture.ordinal();
+        if (this.nbFigure != carte.nbFigure){
+            return this.nbFigure < carte.nbFigure;
+        }
+        if (this.figure.ordinal() != carte.figure.ordinal()){
+            return this.figure.ordinal() < carte.figure.ordinal();
+        }
+        return this.texture.ordinal() < carte.texture.ordinal();
     }
 
     /**
@@ -106,19 +112,21 @@ public class Carte  {
 
     @Override
     public String toString() {
-        return "" + this.couleur + this.nbFigure + "-" + this.figure + "-"+ this.texture.getAbreviation();
+        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation();
     }
 
     public String formeCarte(){
         StringBuilder figure = new StringBuilder(" ");
         StringBuilder borde = new StringBuilder("--");
+        StringBuilder space = new StringBuilder();
         for (int i = 0; i < this.nbFigure; i++) {
-            figure.append(this.figure + " ");
+            figure.append(this.figure.toString(texture.toString()) + " ");
         }
         for (int i = 0; i < figure.length(); i++) {
             borde.append("-");
+            space.append(" ");
         }
-        return "" + this.couleur + borde + "\n|" + figure + "|\n|" +this.texture + " |" + "\n" + borde;
+        return "" + this.couleur + borde + "\n|" + figure + "|" + "\n|" + space + "|\n" + borde;
     }
 
 }

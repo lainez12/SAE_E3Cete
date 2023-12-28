@@ -4,8 +4,8 @@ public enum Texture {
      * Représente la texture d'une Carte : pleine , à pois...
      */
 
-    PLEIN("PL"),
-    POIDS("PO"),
+    PLEIN("P"),
+    HACHURE("H"),
     VIDE("V");
 
     private final String abreviation;

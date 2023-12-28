@@ -106,6 +106,20 @@ public class Ut {
         return lu;
     }
 
+    /** pré-requis : min <= max
+     *  résultat :   un entier saisi compris entre min et max, avec re-saisie éventuelle jusqu'à ce qu'il le soit
+     */
+    public static int saisirEntierMinMax(int min, int max){
+        int n;
+        do {
+            System.out.println("saisir un entire entre " + min +" et " + max);
+            n = saisirEntier();
+
+        }while (n<min || n>max);
+        return n;
+    }  // fin saisirEntierMinMax
+
+
     public static double saisirDouble() {
         return saisirReel();
     }
