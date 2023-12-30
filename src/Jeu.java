@@ -152,7 +152,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.paq.estVide();
     }
 
     /**
@@ -166,6 +166,25 @@ public class Jeu {
      */
 
     public void jouerTourHumain() {
+        System.out.println("Votre score est de " + this.score);
+        System.out.println("La table est la suivante \n" + this.tab);
+        System.out.println("veuillez séléctioner 3 cartes pour tenter de réaliser un E3C.");
+        int[] cartejoueur = this.tab.selectionnerCartesJoueur(3);
+        Carte[] cartesJ = new Carte[3];
+        this.tab.afficherSelection(cartejoueur);
+        for (int i = 0; i < 3; i++) {
+            cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
+        }
+        if (estUnE3C(cartesJ)){
+            System.out.println("Bravo vous avez réaliser un E3C. \n Vous gagner donc 3 point.");
+            this.score += 3;
+        }
+        else {
+            System.out.println("\nDommage ce n'est pas un E3C \n Vous perdez un point.");
+            this.score -= 1;
+        }
+        System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
+        piocherEtPlacerNouvellesCartes(cartejoueur);
 
     }
 
@@ -175,7 +194,19 @@ public class Jeu {
      */
 
     public void jouerHumain() {
+        demmarreJeu();
+        while (!partieEstTerminee()){
+            jouerTourHumain();
+        }
+        System.out.println("Votre score final est de " + this.score);
+    }
 
+    public void demmarreJeu(){
+        int[] table = new int[9];
+        for (int i = 0; i < 9; i++) {
+            table[i] = i;
+        }
+        piocherEtPlacerNouvellesCartes(table);
     }
 
     /**
@@ -189,7 +220,22 @@ public class Jeu {
      */
 
     public void joueurTourOrdinateur() {
-
+        System.out.println("Le score de l'ordi est de " + this.score);
+        System.out.println("La table est la suivante \n" + this.tab);
+        int[] cartesTemp = chercherE3CSurTableOrdinateur();
+        if (cartesTemp == null){
+            System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctinne des cartes au hasard");
+            cartesTemp = selectionAleatoireDeCartesOrdinateur();
+            this.tab.afficherSelection(cartesTemp);
+            this.score -= 1;
+        }
+        else {
+            this.tab.afficherSelection(cartesTemp);
+            System.out.println(Couleur.resetCouleur() + "\nL'ordi a trouvé un E3C");
+            this.score += 3;
+        }
+        System.out.println(Couleur.resetCouleur() + "\nDes nouveeles cartes remplace celle séléctioner sur la table");
+        piocherEtPlacerNouvellesCartes(cartesTemp);
     }
 
     /**
@@ -200,7 +246,12 @@ public class Jeu {
      */
 
     public void jouerOrdinateur() {
-
+        demmarreJeu();
+        while (!partieEstTerminee()){
+            joueurTourOrdinateur();
+            /*Ut.pause(1000);*/
+        }
+        System.out.println("LE score final de l'ordi est de " + this.score);
     }
 
     /**
@@ -216,7 +267,19 @@ public class Jeu {
      */
 
     public void jouer() {
-
+        int rep = 0;
+        do{
+            System.out.println(Couleur.bold() + Couleur.BLEU + "tapez 1 pour jouer \n"+ Couleur.JAUNE+ "tapez 2 pour que l'ordi joue \n" + Couleur.ROUGE + "tapez 3 pour mettre fin au programe" + Couleur.resetCouleur());
+            rep = Ut.saisirEntierMinMax(1,3);
+            if (rep == 1){
+                jouerHumain();
+            }
+            else if (rep == 2) {
+                jouerOrdinateur();
+            }
+            resetJeu();
+        }while (rep != 3);
+        System.out.println("Merci d'avoir joué a notre jeu");
     }
 }
 

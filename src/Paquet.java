@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * La classe Paquet représente un paquet de cartes.
  * Les cartes sont stockées dans un tableau fixe et un indice (entier) permet de connaître le nombre de cartes
@@ -8,7 +10,12 @@
  * - Le tableau stockant les cartes.
  * - Le nombre de cartes restantes dans le paquet.
  */
+
+
 public class Paquet {
+
+    private Carte[] tabCartes;
+    private int indiceCarteRestante;
 
     /**
      * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
@@ -26,7 +33,25 @@ public class Paquet {
      */
 
     public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-
+        this.tabCartes = new Carte[getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+        int comptCarte = 0;
+        for (int i = 0; i < couleurs.length; i++) {
+            Couleur tempCoul = couleurs[i];
+            for (int j = 1; j <= nbFiguresMax; j++) {
+                int tempNbFigure = j;
+                for (int k = 0; k < figures.length; k++) {
+                    Figure tempFigures = figures[k];
+                    for (int l = 0; l < textures.length ; l++) {
+                        Texture tempTextures = textures[l];
+                        Carte tempCarte = new Carte(tempCoul,tempNbFigure,tempFigures,tempTextures);
+                        this.tabCartes[comptCarte] = tempCarte;
+                        comptCarte ++;
+                    }
+                }
+            }
+        }
+        this.indiceCarteRestante = comptCarte;  //peut etre mieux
+        this.melanger();
     }
 
     /**
@@ -34,7 +59,11 @@ public class Paquet {
      */
 
     public Paquet(Paquet paquet) {
-
+        this.tabCartes = new Carte[paquet.tabCartes.length];
+        for (int i = 0; i < paquet.tabCartes.length; i++) {
+            this.tabCartes[i] = paquet.tabCartes[i];
+        }
+        this.indiceCarteRestante = paquet.indiceCarteRestante;
     }
 
 
@@ -46,7 +75,7 @@ public class Paquet {
      */
 
     public static int getNombreCartesAGenerer(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return couleurs.length * nbFiguresMax * figures.length * textures.length;
     }
 
     /**
@@ -55,7 +84,21 @@ public class Paquet {
      */
 
     public void melanger() {
-
+        Random random = new Random();
+        int compt =0;
+        int tempi1;
+        int tempi2;
+        Carte carte1;
+        Carte carte2;
+        do {
+            tempi1 = random.nextInt(this.indiceCarteRestante);
+            tempi2 = random.nextInt(this.indiceCarteRestante);
+            carte1 = this.tabCartes[tempi1];
+            carte2 = this.tabCartes[tempi2];
+            this.tabCartes[tempi1] = carte2;
+            this.tabCartes[tempi2] = carte1;
+            compt ++;
+        }while (compt < 200);
     }
 
     /**
@@ -68,7 +111,20 @@ public class Paquet {
      */
 
     public Paquet trierSelection() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet tempPaquet = new Paquet(this);
+        Carte temp;
+        for (int i = 0; i < this.indiceCarteRestante - 1; i++) {
+            int minindice = i;
+            for (int j = i + 1; j < this.indiceCarteRestante; j++) {
+                if (tempPaquet.tabCartes[minindice].compareTo(tempPaquet.tabCartes[j]) == 1){
+                    minindice = j;
+                }
+            }
+            temp = tempPaquet.tabCartes[i];
+            tempPaquet.tabCartes[i] = tempPaquet.tabCartes[minindice];
+            tempPaquet.tabCartes[minindice] = temp;
+        }
+        return tempPaquet;
     }
 
     /**
@@ -82,7 +138,18 @@ public class Paquet {
      */
 
     public Paquet trierBulles() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet tempPaquet = new Paquet(this);
+        Carte temp;
+        for (int i = 0; i < this.indiceCarteRestante; i++){
+            for (int j = 0; j < this.indiceCarteRestante - i - 1 ; j++) {
+                if (tempPaquet.tabCartes[j].compareTo(tempPaquet.tabCartes[j + 1]) == 1){
+                    temp = tempPaquet.tabCartes[j];
+                    tempPaquet.tabCartes[j] = tempPaquet.tabCartes[j + 1];
+                    tempPaquet.tabCartes[j + 1] = temp;
+                }
+            }
+        }
+        return tempPaquet;
     }
 
     /**
@@ -95,7 +162,21 @@ public class Paquet {
      */
 
     public Paquet trierInsertion() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet tempPaquet = new Paquet(this);
+        Carte temp;
+        for (int i = 1; i < this.indiceCarteRestante; i++) {
+            temp = tempPaquet.tabCartes[i];
+            int j;
+            for (j = i; j > 0; j--) {
+                if (tempPaquet.tabCartes[j - 1].compareTo(temp) == 1) {
+                    tempPaquet.tabCartes[j] = tempPaquet.tabCartes[j - 1];
+                } else {
+                    break;
+                }
+            }
+            tempPaquet.tabCartes[j] = temp;
+        }
+        return tempPaquet;
     }
 
     /**
@@ -105,8 +186,33 @@ public class Paquet {
      * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
      */
     public static void testTris() {
+        Paquet paquetMelange = new Paquet(Couleur.values(),1, Figure.values(), Texture.values());
+        System.out.println("Paquet initial :");
+        System.out.println(paquetMelange.toString());
 
+        paquetMelange.melanger();
+        System.out.println("Paquet mélangé :");
+        System.out.println(paquetMelange.toString());
+
+        Paquet paquetTrieBulles = new Paquet(paquetMelange);
+        System.out.println("Paquet bientot trié par bulles :");
+        System.out.println(paquetTrieBulles.toString());
+        System.out.println("Le paquet est trié (bulles) : ");
+        System.out.println(paquetTrieBulles.trierBulles().toString());
+
+        Paquet paquetTrieInsertion = new Paquet(paquetMelange);
+        System.out.println("Paquet bientot trié par insertion :");
+        System.out.println(paquetTrieInsertion.toString());
+        System.out.println("Le paquet est trié (insertion) : ");
+        System.out.println(paquetTrieInsertion.trierInsertion().toString());
+
+        Paquet paquetTrieSelection = new Paquet(paquetMelange);
+        System.out.println("Paquet bientot trié par sélection :");
+        System.out.println(paquetTrieSelection.toString());
+        System.out.println("Le paquet est trié (sélection) : ");
+        System.out.println(paquetTrieSelection.trierSelection().toString());
     }
+
 
     /**
      * Pre-requis : 0 < nbCartes <= nombre de cartes restantes dans le paquet.
@@ -126,7 +232,14 @@ public class Paquet {
      */
 
     public Carte[] piocher(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Carte[] tempTabCarte = new Carte[nbCartes];
+        if (peutPicoher(nbCartes)){
+            for (int i = 0; i < nbCartes; i++) {
+                tempTabCarte[i] = this.tabCartes[this.indiceCarteRestante - (i+1)];
+            }
+            this.indiceCarteRestante -= nbCartes;
+        }
+        return tempTabCarte;
     }
 
     /**
@@ -134,7 +247,7 @@ public class Paquet {
      */
 
     public boolean peutPicoher(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.indiceCarteRestante >= nbCartes;
     }
 
     /**
@@ -142,7 +255,10 @@ public class Paquet {
      */
 
     public boolean estVide() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        if (this.indiceCarteRestante < 1){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -157,6 +273,11 @@ public class Paquet {
 
     @Override
     public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        StringBuilder rep = new StringBuilder("[");
+        for (int i = 0; i < this.indiceCarteRestante; i++) {
+            rep.append(this.tabCartes[i] + " ");
+        }
+        rep.append(Couleur.resetCouleur() + "]");
+        return rep.toString();
     }
 }
