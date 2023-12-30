@@ -53,13 +53,16 @@ public class Table {
 
     public String toString() {
         StringBuilder table = new StringBuilder();
+        int temp = 0;
         for (int i = 0; i < this.table.length; i++) {
-            table.append(this.table[i]);
-            if (i !=0 && i%larguer == 0){
+            table.append(this.table[i] + " ");
+            temp++;
+            if (temp == larguer){
                 table.append("\n");
+                temp = 0;
             }
         }
-
+        table.append(Couleur.resetCouleur());
         return table.toString();
     }
 
@@ -119,7 +122,6 @@ public class Table {
     public int[] selectionnerCartesJoueur(int nbCartes) {
         int numCarte;
         int compteurCartes = 0;
-        System.out.println("Combien des cartes allez vous selectioner?");
         int[] cartesJouer = new int[nbCartes];
         do {
             numCarte = faireSelectionneUneCarte();
@@ -141,11 +143,9 @@ public class Table {
     }
 
     //PR: cartes.length <= nbCartes possibles de stocker dans la table
-    public void placeCartes(Carte[] cartes){
+    public void placeCartes(Carte[] cartes, int[] posCartes){
         for (int i = 0; i < cartes.length; i++){
-            if (this.table[i] == null){
-                this.table[i] = cartes[i];
-            }
+            this.table[posCartes[i]] = cartes[i];
         }
     }
 

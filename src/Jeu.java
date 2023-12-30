@@ -28,7 +28,6 @@ public class Jeu {
     private Paquet paq;
     private Table tab;
     private int score;
-    private int score2;
 
     /**
      * Action :
@@ -40,7 +39,6 @@ public class Jeu {
         this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
         this.tab = new Table(3, 3);
         this.score = 0;
-        this.score2 = 0;
     }
 
     /**
@@ -50,7 +48,7 @@ public class Jeu {
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
         Carte[] cartesPioches = this.paq.piocher(numerosDeCartes.length);
-        this.tab.placeCartes(cartesPioches);
+        this.tab.placeCartes(cartesPioches,numerosDeCartes);
     }
 
     /**
@@ -60,7 +58,6 @@ public class Jeu {
     public void resetJeu() {
         this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
         this.tab = new Table(3, 3);
-        this.score2 = 0;
         this.score = 0;
     }
 
@@ -222,3 +219,4 @@ public class Jeu {
 
     }
 }
+
