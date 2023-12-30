@@ -52,18 +52,8 @@ public class Table {
      */
 
     public String toString() {
-        StringBuilder table = new StringBuilder();
-        int temp = 0;
-        for (int i = 0; i < this.table.length; i++) {
-            table.append(this.table[i] + " ");
-            temp++;
-            if (temp == larguer){
-                table.append("\n");
-                temp = 0;
-            }
-        }
-        table.append(Couleur.resetCouleur());
-        return table.toString();
+
+        return Carte.afficherCartes(this.table, this.larguer);
     }
 
     /**
@@ -89,7 +79,7 @@ public class Table {
      */
 
     public int faireSelectionneUneCarte() {
-        System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 1,1)");
+        System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 0,1)");
         String input;
         Coordonnees carteCoordonnes;
         do {
@@ -104,11 +94,12 @@ public class Table {
     public int numCarte(Coordonnees c){
         int numCarte = 0;
         if (c.getLigne() > 0){
-            numCarte = c.getLigne()-1;
+            numCarte = (this.larguer * c.getLigne());
         } else {
             numCarte = c.getLigne();
         }
         numCarte += c.getColonne();
+        System.out.println("Le num de carte est :" + numCarte); //delete
         return numCarte;
     }
 

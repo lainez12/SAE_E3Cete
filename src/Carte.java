@@ -129,4 +129,31 @@ public class Carte  {
         return "" + this.couleur + borde + "\n|" + figure + "|" + "\n|" + space + "|\n" + borde;
     }
 
+    public static String afficherCartes(Carte[] cartes, int larguer){
+        StringBuilder table = new StringBuilder();
+        for (int i = 0; i < cartes.length; i+=larguer) {
+            for (int j = 0; j < larguer; j++) {
+                table.append(cartes[i + j].couleur).append("----- \t\t");
+            }
+            table.append("\n");
+            for (int k = 1; k < 4; k++) {
+                for (int j = 0; j < larguer; j++) {
+                    table.append(cartes[i + j].couleur).append("| ").append(printFigure(cartes[i + j], k)).append(" | \t\t");
+                }
+                table.append("\n");
+            }
+            for (int j = 0; j < larguer; j++) {
+                table.append(cartes[i + j].couleur).append("----- \t\t");
+            }
+            table.append("\n\n");
+        }
+        return table.toString();
+    }
+
+    public static String printFigure(Carte c, int ligne){
+        if (c.nbFigure >= ligne){
+            return c.figure.toString(c.texture.toString());
+        } else return " ";
+    }
+
 }

@@ -122,8 +122,10 @@ public class Jeu {
             for (int j = 0; j < tab.getTaille(); j++) {
                 for (int k = 0; k < tab.getTaille(); k++) {
                     Carte[] cartes = new Carte[]{tab.getCarte(i),tab.getCarte(j),tab.getCarte(k)};
-                    if (estUnE3C(cartes)){
-                        return new int[]{i,j,k};
+                    if (i != j && j != k && k != i){
+                        if (estUnE3C(cartes)){
+                            return new int[]{i,j,k};
+                        }
                     }
                 }
             }
@@ -143,7 +145,7 @@ public class Jeu {
             i = Ut.randomMinMax(0,tab.getTaille()-1);
             j = Ut.randomMinMax(0,tab.getTaille()-1);
             k = Ut.randomMinMax(0,tab.getTaille()-1);
-        } while (i != j && j != k && i != k);
+        } while (i == j || j == k || i == k);
         return new int[]{i,j,k};
     }
 
@@ -168,7 +170,7 @@ public class Jeu {
     public void jouerTourHumain() {
         System.out.println("Votre score est de " + this.score);
         System.out.println("La table est la suivante \n" + this.tab);
-        System.out.println("veuillez séléctioner 3 cartes pour tenter de réaliser un E3C.");
+        System.out.println(Couleur.resetCouleur() + "veuillez séléctioner 3 cartes pour tenter de réaliser un E3C.");
         int[] cartejoueur = this.tab.selectionnerCartesJoueur(3);
         Carte[] cartesJ = new Carte[3];
         this.tab.afficherSelection(cartejoueur);
@@ -176,11 +178,11 @@ public class Jeu {
             cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
         }
         if (estUnE3C(cartesJ)){
-            System.out.println("Bravo vous avez réaliser un E3C. \n Vous gagner donc 3 point.");
+            System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 point.");
             this.score += 3;
         }
         else {
-            System.out.println("\nDommage ce n'est pas un E3C \n Vous perdez un point.");
+            System.out.println(Couleur.resetCouleur() + "\nDommage ce n'est pas un E3C \n Vous perdez un point.");
             this.score -= 1;
         }
         System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
@@ -249,7 +251,7 @@ public class Jeu {
         demmarreJeu();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            /*Ut.pause(1000);*/
+            Ut.pause(3500);
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }
