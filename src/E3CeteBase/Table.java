@@ -1,3 +1,5 @@
+package E3CeteBase;
+
 /**
  * La classe Table représente une table de jeu contenant des cartes.
  *
@@ -52,7 +54,6 @@ public class Table {
      */
 
     public String toString() {
-
         return Carte.afficherCartes(this.table, this.larguer);
     }
 
@@ -60,10 +61,9 @@ public class Table {
      * Résullat : Vrai la carte située aux coordonnées précisées en paramètre est une carte possible pour la table.
      */
     public boolean carteExiste(Coordonnees coordonnees) {
-        if (!(coordonnees.getLigne() <= this.hauteur) || !(coordonnees.getColonne() <= this.larguer)){
-            return false;
-        }
-        return true;
+        boolean ligne = coordonnees.getLigne() < this.hauteur;
+        boolean colonne = coordonnees.getColonne() < this.larguer;
+        return ligne && colonne;
     }
 
     /**
@@ -78,13 +78,13 @@ public class Table {
      */
 
     public int faireSelectionneUneCarte() {
-        System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 0,1)");
         String input;
         Coordonnees carteCoordonnes;
         do {
-             input = Ut.saisirChaine();
+            System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 1,1)");
+            input = Ut.saisirChaine();
             carteCoordonnes =  new Coordonnees(input);
-        } while (!Coordonnees.formatEstValide(input) && carteExiste(carteCoordonnes));
+        } while (!Coordonnees.formatEstValide(input) || !carteExiste(carteCoordonnes));
 
         return numCarte(carteCoordonnes);
     }
@@ -98,7 +98,6 @@ public class Table {
             numCarte = c.getLigne();
         }
         numCarte += c.getColonne();
-        System.out.println("Le num de carte est :" + numCarte); //delete
         return numCarte;
     }
 
@@ -116,9 +115,12 @@ public class Table {
         do {
             numCarte = faireSelectionneUneCarte();
             if (!doublons(numCarte,compteurCartes,cartesJouer)){
+                System.out.println("Le num de carte est :" + (numCarte+1)); //delete
                 cartesJouer[compteurCartes] = numCarte;
+                compteurCartes++;
+            } else {
+                System.out.println("Error doublon, resseyez.");
             }
-            compteurCartes++;
         } while (!(compteurCartes == nbCartes));
         return cartesJouer;
     }

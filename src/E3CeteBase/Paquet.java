@@ -1,3 +1,5 @@
+package E3CeteBase;
+
 import java.util.Random;
 
 /**
@@ -16,6 +18,10 @@ public class Paquet {
 
     private Carte[] tabCartes;
     private int indiceCarteRestante;
+
+    public int getIndiceCarteRestante() {
+        return indiceCarteRestante;
+    }
 
     /**
      * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0

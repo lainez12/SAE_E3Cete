@@ -1,3 +1,5 @@
+package E3CeteBase;
+
 public enum Texture {
 
     /**

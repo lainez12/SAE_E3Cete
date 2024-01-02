@@ -1,3 +1,5 @@
+package E3CeteBase;
+
 public class Coordonnees {
 
 /**
@@ -27,7 +29,9 @@ public class Coordonnees {
             String[] splited = input.split(",");
             //splitted est un tableau de String qui contient les sous chaines de caracteres contenues dans input et séparées par ','
             this.x = Integer.parseInt(splited[0]);
+            this.x--;
             this.y = Integer.parseInt(splited[1]);
+            this.y--;
         } else System.out.println("Format invalide");
     }
 
