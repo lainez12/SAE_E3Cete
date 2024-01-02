@@ -1,3 +1,4 @@
+package E3CeteBase;
 
 /**
  * La classe Carte représente une carte possèdant une figure répétée un certain nombre de fois avec une texture et une couleur.
@@ -112,42 +113,84 @@ public class Carte  {
 
     @Override
     public String toString() {
-        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
-    }
-
-    public String formeCarte(){
-        StringBuilder figure = new StringBuilder(" ");
-        StringBuilder borde = new StringBuilder("--");
-        StringBuilder space = new StringBuilder();
-        for (int i = 0; i < this.nbFigure; i++) {
-            figure.append(this.figure.toString(texture.toString()) + " ");
-        }
-        for (int i = 0; i < figure.length(); i++) {
-            borde.append("-");
-            space.append(" ");
-        }
-        return "" + this.couleur + borde + "\n|" + figure + "|" + "\n|" + space + "|\n" + borde;
+        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString() + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
     }
 
     public static String afficherCartes(Carte[] cartes, int larguer){
         StringBuilder table = new StringBuilder();
         for (int i = 0; i < cartes.length; i+=larguer) {
-            for (int j = 0; j < larguer; j++) {
-                table.append(cartes[i + j].couleur).append("----- \t\t");
-            }
+            table.append(border(cartes.length,i,larguer,cartes));
             table.append("\n");
-            for (int k = 1; k < 4; k++) {
-                for (int j = 0; j < larguer; j++) {
-                    table.append(cartes[i + j].couleur).append("| ").append(printFigure(cartes[i + j], k)).append(" | \t\t");
-                }
-                table.append("\n");
-            }
-            for (int j = 0; j < larguer; j++) {
-                table.append(cartes[i + j].couleur).append("----- \t\t");
-            }
+            table.append(contentCartes(cartes,i,larguer));
+            table.append(border(cartes.length,i,larguer,cartes));
             table.append("\n\n");
         }
         table.append(Couleur.resetCouleur());
+        return table.toString();
+    }
+    public static String afficherCartesGrand(Carte[] cartes, int larguer){
+        StringBuilder table = new StringBuilder();
+        for (int i = 0; i < cartes.length; i+=larguer) {
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n");
+            table.append(contentCartesGrand(cartes,i,larguer));
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n\n");
+        }
+        table.append(Couleur.resetCouleur());
+        return table.toString();
+    }
+
+    public static String contentCartes(Carte[] cartes, int i, int larguer){
+        StringBuilder table = new StringBuilder();
+        int newLarguer = 0;
+        if (i+larguer <= cartes.length){
+            newLarguer = larguer;
+        } else {
+            newLarguer = cartes.length-i;
+        }
+        for (int k = 1; k < 4; k++) {
+            for (int j = 0; j < newLarguer; j++) {
+                table.append(cartes[i + j].couleur).append("| ").append(printFigure(cartes[i + j], k)).append(" | \t\t");
+            }
+            table.append("\n");
+        }
+        return table.toString();
+    }
+    public static String contentCartesGrand(Carte[] cartes, int i, int larguer){
+        StringBuilder table = new StringBuilder();
+        int newLarguer = 0;
+        if (i+larguer <= cartes.length){
+            newLarguer = larguer;
+        } else {
+            newLarguer = cartes.length-i;
+        }
+        for (int j = 0; j < newLarguer; j++) {
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].figure).append(" | \t\t");
+        }
+        table.append("\n");
+        for (int j = 0; j < newLarguer; j++) {
+            table.append(cartes[i + j].couleur).append("|  ").append(cartes[i+j].nbFigure).append("  | \t\t");
+        }
+        table.append("\n");
+        for (int j = 0; j < newLarguer; j++) {
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture).append(" | \t\t");
+        }
+        table.append("\n");
+        return table.toString();
+    }
+
+    public static String border(int length, int i, int larguer, Carte[] cartes){
+        StringBuilder table = new StringBuilder();
+        int newLarguer = 0;
+        if (i+larguer <= length){
+            newLarguer = larguer;
+        } else {
+            newLarguer = length-i;
+        }
+        for (int j = 0; j < newLarguer; j++) {
+                table.append(cartes[i + j].couleur).append("----- \t\t");
+        }
         return table.toString();
     }
 
@@ -156,5 +199,37 @@ public class Carte  {
             return c.figure.toString(c.texture.toString());
         } else return " ";
     }
+    
+    
+     public static int[] getCouleurs(Carte[] cartes){
+             int[] couleurs = new int[cartes.length];
+             for (int i = 0; i < cartes.length; i++) {
+                     couleurs[i] = cartes[i].getCouleur().ordinal();
+                 }
+             return couleurs;
+         }
+
+         public static int[] getNbsFigures(Carte[] cartes){
+             int[] nbsFigures = new int[cartes.length];
+             for (int i = 0; i < cartes.length; i++) {
+                     nbsFigures[i] = cartes[i].getNbFigures();
+                 }
+             return nbsFigures;
+         }
+         public static int[] getTextures(Carte[] cartes){
+             int[] textures = new int[cartes.length];
+             for (int i = 0; i < cartes.length; i++) {
+                     textures[i] = cartes[i].getTexture().ordinal();
+                 }
+             return textures;
+         }
+
+         public static int[] getFigures(Carte[] cartes){
+             int[] figures = new int[cartes.length];
+             for (int i = 0; i < cartes.length; i++) {
+                     figures[i] = cartes[i].getFigure().ordinal();
+                 }
+             return figures;
+         }
 
 }
