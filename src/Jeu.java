@@ -69,16 +69,19 @@ public class Jeu {
         Carte c1 = cartes[0];
         Carte c2 = cartes[1];
         Carte c3 = cartes[2];
-        if (memeAttributs(1,c1,c2,c3)){
-            return diffAttributs(2,c1,c2,c3) && diffAttributs(3,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
-        } else if (memeAttributs(2,c1,c2,c3) && memeAttributs(4,c1,c2,c3)) {
-            return diffAttributs(1,c1,c2,c3) && diffAttributs(3,c1,c2,c3);
-        } else if (memeAttributs(3,c1,c2,c3)) {
-            return diffAttributs(1,c1,c2,c3) && diffAttributs(2,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
-        } else {
-            return diffAttributs(1,c1,c2,c3) && diffAttributs(2,c1,c2,c3) && diffAttributs(3,c1,c2,c3) && diffAttributs(4,c1,c2,c3);
-        }
+        return attributsError(c1, c2, c3);
+    }
 
+    public static boolean attributsError(Carte c1, Carte c2, Carte c3){
+        for (int i = 1; i < 5; i++) {
+            boolean attributs = memeAttributs(i, c1,c2,c3);
+            if (!attributs){
+                if (!diffAttributs(i,c1,c2,c3)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static boolean memeAttributs(int attribut, Carte c1, Carte c2, Carte c3){

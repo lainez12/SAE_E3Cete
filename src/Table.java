@@ -61,7 +61,6 @@ public class Table {
      */
     public boolean carteExiste(Coordonnees coordonnees) {
         if (!(coordonnees.getLigne() <= this.hauteur) || !(coordonnees.getColonne() <= this.larguer)){
-            System.out.println("La carte n'est pas dans la table");
             return false;
         }
         return true;

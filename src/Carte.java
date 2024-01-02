@@ -112,7 +112,7 @@ public class Carte  {
 
     @Override
     public String toString() {
-        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation();
+        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
     }
 
     public String formeCarte(){
@@ -147,6 +147,7 @@ public class Carte  {
             }
             table.append("\n\n");
         }
+        table.append(Couleur.resetCouleur());
         return table.toString();
     }
 

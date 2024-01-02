@@ -51,6 +51,9 @@ public class Coordonnees {
      * Aide : On peut utiliser Ut.estNombre pour vérifier qu'une chaîne de caractères est bien un nombre.
      */
     public static boolean formatEstValide(String input) {
+        if (input.length() != 3 || input.charAt(1) != ','){
+            return false;
+        }
         String x = String.valueOf(input.charAt(0));
         String y = String.valueOf(input.charAt(2));
         return Ut.estNombre(x) && Ut.estNombre(y);
