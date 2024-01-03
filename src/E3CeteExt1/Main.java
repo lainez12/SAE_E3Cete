@@ -1,6 +1,4 @@
-package E3CeteExt;
-
-import E3CeteBase.Jeu;
+package E3CeteExt1;
 
 public class Main {
 

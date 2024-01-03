@@ -1,4 +1,6 @@
-package E3CeteBase;
+package E3CeteExt1;
+
+import E3CeteBase.*;
 
 /**
  * La classe Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
@@ -50,7 +52,9 @@ public class Jeu {
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
         Carte[] cartesPioches = this.paq.piocher(numerosDeCartes.length);
-        this.tab.placeCartes(cartesPioches,numerosDeCartes);
+        if (cartesPioches != null) {
+            this.tab.placeCartes(cartesPioches, numerosDeCartes);
+        } else this.tab.effaceCartes(numerosDeCartes);
     }
 
     /**
@@ -58,8 +62,8 @@ public class Jeu {
      */
 
     public void resetJeu() {
-        this.paq.setIndiceCarteRestante();
-        this.paq.melanger();
+        this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
+        this.tab = new Table(3, 3);
         this.score = 0;
     }
 
@@ -123,9 +127,10 @@ public class Jeu {
      */
 
     public int[] chercherE3CSurTableOrdinateur() {
-        for (int i = 0; i < tab.getTaille(); i++) {
-            for (int j = 0; j < tab.getTaille(); j++) {
-                for (int k = 0; k < tab.getTaille(); k++) {
+        int taille = tab.getCartesSurTable();
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                for (int k = 0; k < taille; k++) {
                     Carte[] cartes = new Carte[]{tab.getCarte(i),tab.getCarte(j),tab.getCarte(k)};
                     if (i != j && j != k && k != i){
                         if (estUnE3C(cartes)){
@@ -147,9 +152,9 @@ public class Jeu {
     public int[] selectionAleatoireDeCartesOrdinateur() {
         int i,j,k;
         do {
-            i = Ut.randomMinMax(0,tab.getTaille()-1);
-            j = Ut.randomMinMax(0,tab.getTaille()-1);
-            k = Ut.randomMinMax(0,tab.getTaille()-1);
+            i = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
+            j = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
+            k = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
         } while (i == j || j == k || i == k);
         return new int[]{i,j,k};
     }
@@ -159,7 +164,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        return this.paq.estVide();
+        return this.paq.estVide() && this.tab.tableEstVide();
     }
 
     /**
@@ -182,6 +187,7 @@ public class Jeu {
         for (int i = 0; i < 3; i++) {
             cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
         }
+
         if (estUnE3C(cartesJ)){
             System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 point.");
             this.score += 3;
@@ -191,6 +197,7 @@ public class Jeu {
             this.score -= 1;
         }
         System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
+        this.tab.setCartesSurTable(tab.getCartesSurTable()-cartejoueur.length);
         piocherEtPlacerNouvellesCartes(cartejoueur);
 
     }
@@ -201,14 +208,14 @@ public class Jeu {
      */
 
     public void jouerHumain() {
-        demmarreJeu();
+        demmarreTable();
         while (!partieEstTerminee()){
             jouerTourHumain();
         }
         System.out.println("Votre score final est de " + this.score);
     }
 
-    public void demmarreJeu(){
+    public void demmarreTable(){
         int[] table = new int[9];
         for (int i = 0; i < 9; i++) {
             table[i] = i;
@@ -231,7 +238,7 @@ public class Jeu {
         System.out.println("La table est la suivante \n" + this.tab);
         int[] cartesTemp = chercherE3CSurTableOrdinateur();
         if (cartesTemp == null){
-            System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctinne des cartes au hasard");
+            System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctionne des cartes au hasard");
             cartesTemp = selectionAleatoireDeCartesOrdinateur();
             this.tab.afficherSelection(cartesTemp);
             this.score -= 1;
@@ -242,6 +249,7 @@ public class Jeu {
             this.score += 3;
         }
         System.out.println(Couleur.resetCouleur() + "\nDes nouveeles cartes remplace celle séléctioner sur la table");
+        this.tab.setCartesSurTable(tab.getCartesSurTable()-cartesTemp.length);
         piocherEtPlacerNouvellesCartes(cartesTemp);
     }
 
@@ -253,10 +261,10 @@ public class Jeu {
      */
 
     public void jouerOrdinateur() {
-        demmarreJeu();
+        demmarreTable();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            Ut.pause(3500);
+            /*Ut.pause(3500);*/
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }

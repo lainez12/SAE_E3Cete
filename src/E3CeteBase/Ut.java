@@ -28,7 +28,7 @@ public class Ut {
      */
 
     public static void passerLigne() {
-        System.out.println("");
+        System.out.println();
     }
 
     public static void passerALaLigne() {
@@ -270,6 +270,32 @@ public class Ut {
         long endTime = System.nanoTime();
         return ((endTime - startTime) / 1000000);
     }
+
+    public static boolean estDansleTab(int num, int[] tab){
+        for (int j : tab) {
+            if (num == j) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int[] order(int[] nums){
+        int[] tab = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
+                if (nums[j] < nums[i]){
+                    int min = nums[j];
+                    nums[j] = nums[i];
+                    nums[i] = min;
+
+                }
+            }
+        }
+        return tab;
+    }
+
+
 
 } // end class
 
