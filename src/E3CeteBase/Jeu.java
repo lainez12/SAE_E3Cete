@@ -209,8 +209,8 @@ public class Jeu {
     }
 
     public void demmarreJeu(){
-        int[] table = new int[9];
-        for (int i = 0; i < 9; i++) {
+        int[] table = new int[this.tab.getTaille()];
+        for (int i = 0; i < table.length; i++) {
             table[i] = i;
         }
         piocherEtPlacerNouvellesCartes(table);

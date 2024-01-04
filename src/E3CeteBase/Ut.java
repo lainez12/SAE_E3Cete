@@ -280,8 +280,7 @@ public class Ut {
         return false;
     }
 
-    public static int[] order(int[] nums){
-        int[] tab = new int[nums.length];
+    public static int[] order(int[] nums){//Ext 1
         for (int i = 0; i < nums.length; i++) {
             for (int j = i; j < nums.length; j++) {
                 if (nums[j] < nums[i]){
@@ -292,7 +291,7 @@ public class Ut {
                 }
             }
         }
-        return tab;
+        return nums;
     }
 
 

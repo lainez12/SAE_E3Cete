@@ -1,6 +1,13 @@
-package E3CeteExt1;
+package E3CeteExt12;
 
-import E3CeteBase.*;
+import E3CeteBase.Carte;
+import E3CeteBase.Paquet;
+import E3CeteBase.Couleur;
+import E3CeteBase.Figure;
+import E3CeteBase.Texture;
+import E3CeteBase.Ut;
+
+
 
 /**
  * La classe Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
@@ -41,8 +48,24 @@ public class Jeu {
 
     public Jeu() {
         this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
-        this.tab = new Table(3, 3);
+        int hauteur = 0;
+        int larguer = 0;
+        do {
+            System.out.println("Quel est l'hauter de votre table?");
+            hauteur = Ut.saisirEntier();
+            System.out.println("Quel est l'hauter de votre table?");
+            larguer = Ut.saisirEntier();
+        }while (!this.possibleTable(hauteur,larguer));
+        this.tab = new Table(hauteur, larguer);
         this.score = 0;
+    }
+
+    private boolean possibleTable(int h, int l){
+        boolean rep = (h*l) <= (this.paq.getIndiceCarteRestante()/2);
+        if (!rep){
+            System.out.println("La table est trop grande, Ressayez");
+        }
+        return rep;
     }
 
     /**
@@ -62,8 +85,9 @@ public class Jeu {
      */
 
     public void resetJeu() {
-        this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
-        this.tab = new Table(3, 3);
+        this.paq.setIndiceCarteRestante();
+        this.paq.melanger();
+        this.tab = new Table(tab.getHauteur(), tab.getLarguer());
         this.score = 0;
     }
 
@@ -164,7 +188,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        return this.paq.estVide() && this.tab.tableEstVide();
+        return this.paq.getIndiceCarteRestante() < 3 && this.tab.getCartesSurTable() < 3;
     }
 
     /**
@@ -216,8 +240,8 @@ public class Jeu {
     }
 
     public void demmarreTable(){
-        int[] table = new int[9];
-        for (int i = 0; i < 9; i++) {
+        int[] table = new int[this.tab.getTaille()];
+        for (int i = 0; i < table.length; i++) {
             table[i] = i;
         }
         piocherEtPlacerNouvellesCartes(table);

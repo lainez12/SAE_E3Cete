@@ -1,4 +1,4 @@
-package E3CeteExt1;
+package E3CeteExt12;
 
 import E3CeteBase.Carte;
 import E3CeteBase.Coordonnees;
@@ -35,8 +35,8 @@ public class Table {
      * Exemple : hauteur : 3, largeur : 3 => construit une table 3x3 (pouvant donc accueillir 9 cartes).
      */
 
-    public Table(int hauteur, int largeur){
-        this.larguer = largeur;
+    public Table(int hauteur, int larguer){
+        this.larguer = larguer;
         this.hauteur = hauteur;
         this.table = new Carte[this.getTaille()];
     }
@@ -51,7 +51,7 @@ public class Table {
         return this.larguer*this.hauteur;
     }
 
-    public boolean tableEstVide(){return this.cartesSurTable < 3; };
+    public boolean tableEstVide(){return this.cartesSurTable < 1; };//pour ext 1
 
     /**
      * Pre-requis : la table est pleine
@@ -185,6 +185,14 @@ public class Table {
 
     public int getCartesSurTable() {
         return this.cartesSurTable;
+    }
+
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public int getLarguer() {
+        return larguer;
     }
 
     public void setCartesSurTable(int cartesSurTable) {
