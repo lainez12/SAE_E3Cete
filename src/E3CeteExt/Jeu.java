@@ -153,7 +153,7 @@ public class Jeu {
      */
 
      public int[] chercherE3COuPlusSurTableOrdinateur() {
-        int taille = tab.getTaille();
+        int taille = tab.getCartesSurTable();
         int[][] tousLesE3C = new int[1][3];
         int compteurE3C = 0;
         for (int i = 0; i < taille; i++) {
@@ -192,7 +192,7 @@ public class Jeu {
         return nouveau;
     }
     public int[] ajouterUnEXC(int[] eXc){
-        int taille = tab.getTaille();
+        int taille = tab.getCartesSurTable();
         int[] nouveauEXC = Ut.copieDuTab(eXc);
         for (int i = 0; i < taille; i++) {
             if (!Ut.estInclu(eXc,i)){

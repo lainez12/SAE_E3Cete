@@ -61,7 +61,7 @@ public class Table {
      */
 
     public String toString() {
-        return Carte.afficherCartes(this.table, this.larguer);
+        return Carte.afficherCartesGrand(this.table, this.larguer);
     }
 
     /**
