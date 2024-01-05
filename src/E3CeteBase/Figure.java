@@ -9,17 +9,43 @@ public enum Figure {
     /*J'ai utilisé cette page  https://cloford.com/resources/charcodes/utf-8_geometric.htm
     *                          https://altcodeunicode.com/alt-codes-geometric-shape-symbols/ */
 
-    CARRE("■","▧","□"),
-    LOSANGE("◆","⬖","⬦"),
-    OVALE("⬮","◍", "⬯");
+    CARRE("C","■","▧","□"),
+    LOSANGE("L","◆","⬖","⬦"),
+    OVALE("O","⬮","◍", "⬯"),
+    F4("▢"),
+    F5("▣"),
+    F6("▤"),
+    F7("▥"),
+    F8("▦"),
+    F9("▬"),
+    F10("▮"),
+    F11("▶"),
+    F12("▲"),
+    F13("▼"),
+    F14("◀"),
+    F15("◉"),
+    F16("◖"),
+    F17("◢"),
+    F18("◣"),
+    F19("❒"),
+    F20("⬟");
+    private final String defaut;
     private final String plein;
     private final String hachure;
     private final String vide;
 
-    Figure(String plein, String hachure, String vide){
+    Figure(String defaut, String plein, String hachure, String vide){
+        this.defaut = defaut;
         this.plein = plein;
         this.hachure = hachure;
         this.vide = vide;
+    }
+
+    Figure(String defaut){
+        this.defaut = defaut;
+        this.plein = "";
+        this.hachure = "";
+        this.vide = "";
     }
 
     public String toString(String texture){
@@ -30,6 +56,9 @@ public enum Figure {
         } else {
             return vide;
         }
+    }
+    public String toString(){
+        return defaut;
     }
 
 }

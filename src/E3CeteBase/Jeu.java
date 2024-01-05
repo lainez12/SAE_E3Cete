@@ -38,7 +38,7 @@ public class Jeu {
      */
 
     public Jeu() {
-        this.paq = new Paquet(Couleur.values(), 3, Figure.values(), Texture.values());
+        this.paq = new Paquet(new Couleur[]{Couleur.ROUGE,Couleur.BLEU,Couleur.JAUNE}, 3, new Figure[]{Figure.CARRE,Figure.OVALE,Figure.LOSANGE}, new Texture[]{Texture.PLEIN,Texture.HACHURE,Texture.VIDE});
         this.tab = new Table(3, 3);
         this.score = 0;
     }
@@ -250,7 +250,7 @@ public class Jeu {
         demmarreJeu();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            Ut.pause(3500);
+            /*Ut.pause(3500);*/
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }
