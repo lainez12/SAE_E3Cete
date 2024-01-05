@@ -271,6 +271,15 @@ public class Ut {
         return ((endTime - startTime) / 1000000);
     }
 
+    public static boolean estDansleRange(int min, int max, int val){
+        if (min > max ){
+            min += max;
+            max = min-max;
+            min = min-max;
+        }
+        return val <= max && val >=min;
+    }
+
 } // end class
 
 
