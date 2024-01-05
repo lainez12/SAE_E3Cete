@@ -200,4 +200,37 @@ public class Carte  {
         } else return " ";
     }
 
+    public static int[] getCouleurs(Carte[] cartes){
+        int[] couleurs = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            couleurs[i] = cartes[i].getCouleur().ordinal();
+        }
+        return couleurs;
+    }
+
+    public static int[] getNbsFigures(Carte[] cartes){
+        int[] nbsFigures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            nbsFigures[i] = cartes[i].getNbFigures();
+        }
+        return nbsFigures;
+    }
+
+
+    public static int[] getTextures(Carte[] cartes){
+        int[] textures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            textures[i] = cartes[i].getTexture().ordinal();
+        }
+        return textures;
+    }
+
+    public static int[] getFigures(Carte[] cartes){
+        int[] figures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            figures[i] = cartes[i].getFigure().ordinal();
+        }
+        return figures;
+    }
+
 }
