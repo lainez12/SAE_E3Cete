@@ -128,19 +128,6 @@ public class Carte  {
         table.append(Couleur.resetCouleur());
         return table.toString();
     }
-    public static String afficherCartesGrand(Carte[] cartes, int larguer){
-        StringBuilder table = new StringBuilder();
-        for (int i = 0; i < cartes.length; i+=larguer) {
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n");
-            table.append(contentCartesGrand(cartes,i,larguer));
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n\n");
-        }
-        table.append(Couleur.resetCouleur());
-        return table.toString();
-    }
-
     public static String contentCartes(Carte[] cartes, int i, int larguer){
         StringBuilder table = new StringBuilder();
         int newLarguer = 0;
@@ -157,6 +144,19 @@ public class Carte  {
         }
         return table.toString();
     }
+
+    public static String afficherCartesGrand(Carte[] cartes, int larguer){
+        StringBuilder table = new StringBuilder();
+        for (int i = 0; i < cartes.length; i+=larguer) {
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n");
+            table.append(contentCartesGrand(cartes,i,larguer));
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n\n");
+        }
+        table.append(Couleur.resetCouleur());
+        return table.toString();
+    }
     public static String contentCartesGrand(Carte[] cartes, int i, int larguer){
         StringBuilder table = new StringBuilder();
         int newLarguer = 0;
@@ -170,11 +170,11 @@ public class Carte  {
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("|  ").append(cartes[i+j].nbFigure).append("  | \t\t");
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].nbFigure).append(" | \t\t");
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture).append(" | \t\t");
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture.getAbreviation()).append(" | \t\t");
         }
         table.append("\n");
         return table.toString();

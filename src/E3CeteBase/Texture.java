@@ -40,4 +40,13 @@ public enum Texture {
     public String toString() {
         return super.toString();
     }
+
+    public static Texture[] values(int range){
+        Texture[] all = Texture.values();
+        Texture[] nouveau = new Texture[range];
+        for (int i = 0; i < nouveau.length; i++) {
+            nouveau[i] = all[i];
+        }
+        return nouveau;
+    }
 }

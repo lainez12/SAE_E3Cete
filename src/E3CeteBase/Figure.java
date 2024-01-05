@@ -9,9 +9,9 @@ public enum Figure {
     /*J'ai utilisé cette page  https://cloford.com/resources/charcodes/utf-8_geometric.htm
     *                          https://altcodeunicode.com/alt-codes-geometric-shape-symbols/ */
 
-    CARRE("C","■","▧","□"),
-    LOSANGE("L","◆","⬖","⬦"),
-    OVALE("O","⬮","◍", "⬯"),
+    CARRE("■","■","▧","□"),
+    LOSANGE("◆","◆","⬖","⬦"),
+    OVALE("⬮","⬮","◍", "⬯"),
     F4("▢"),
     F5("▣"),
     F6("▤"),
@@ -57,8 +57,19 @@ public enum Figure {
             return vide;
         }
     }
+
+
     public String toString(){
         return defaut;
+    }
+
+    public static Figure[] values(int range){
+        Figure[] all = Figure.values();
+        Figure[] nouveau = new Figure[range];
+        for (int i = 0; i < nouveau.length; i++) {
+            nouveau[i] = all[i];
+        }
+        return nouveau;
     }
 
 }

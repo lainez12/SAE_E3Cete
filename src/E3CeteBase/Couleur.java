@@ -52,4 +52,13 @@ public enum Couleur {
     public String toString(){
         return code;
     }
+
+    public static Couleur[] values(int range){
+        Couleur[] all = Couleur.values();
+        Couleur[] nouveau = new Couleur[range];
+        for (int i = 0; i < nouveau.length; i++) {
+            nouveau[i] = all[i];
+        }
+        return nouveau;
+    }
 }
