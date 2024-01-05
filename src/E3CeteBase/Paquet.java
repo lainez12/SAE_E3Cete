@@ -261,7 +261,7 @@ public class Paquet {
      */
 
     public boolean estVide() {
-        if (this.indiceCarteRestante < 1){
+        if (this.indiceCarteRestante < 3){
             return true;
         }
         return false;

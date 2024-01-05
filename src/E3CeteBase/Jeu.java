@@ -117,20 +117,25 @@ public class Jeu {
      */
 
     public int[] chercherE3CSurTableOrdinateur() {
-        for (int i = 0; i < tab.getTaille(); i++) {
-            for (int j = 0; j < tab.getTaille(); j++) {
-                for (int k = 0; k < tab.getTaille(); k++) {
-                    Carte[] cartes = new Carte[]{tab.getCarte(i),tab.getCarte(j),tab.getCarte(k)};
-                    if (i != j && j != k && k != i){
-                        if (estUnE3C(cartes)){
-                            return new int[]{i,j,k};
-                        }
+        int taille = tab.getTaille();
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                if (i == j) continue;
+                for (int k = 0; k < taille; k++) {
+                    if (i == k || j == k) continue;
+                    Carte carteI = tab.getCarte(i);
+                    Carte carteJ = tab.getCarte(j);
+                    Carte carteK = tab.getCarte(k);
+                    Carte[] cartes = new Carte[]{carteI, carteJ, carteK};
+                    if (estUnE3C(cartes)) {
+                        return new int[]{i, j, k};
                     }
                 }
             }
         }
         return null;
     }
+
 
     /**
      * Action : Sélectionne alétoirement trois cartes sur la table.

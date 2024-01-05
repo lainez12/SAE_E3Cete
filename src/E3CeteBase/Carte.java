@@ -113,7 +113,7 @@ public class Carte  {
 
     @Override
     public String toString() {
-        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
+        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString() + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
     }
 
     public static String afficherCartes(Carte[] cartes, int larguer){
