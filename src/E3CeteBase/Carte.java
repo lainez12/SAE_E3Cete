@@ -113,7 +113,7 @@ public class Carte  {
 
     @Override
     public String toString() {
-        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString(texture.toString()) + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
+        return "" + this.couleur + this.nbFigure + "-" + this.figure.toString() + "-"+ this.texture.getAbreviation() + Couleur.resetCouleur();
     }
 
     public static String afficherCartes(Carte[] cartes, int larguer){
@@ -128,19 +128,6 @@ public class Carte  {
         table.append(Couleur.resetCouleur());
         return table.toString();
     }
-    public static String afficherCartesGrand(Carte[] cartes, int larguer){
-        StringBuilder table = new StringBuilder();
-        for (int i = 0; i < cartes.length; i+=larguer) {
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n");
-            table.append(contentCartesGrand(cartes,i,larguer));
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n\n");
-        }
-        table.append(Couleur.resetCouleur());
-        return table.toString();
-    }
-
     public static String contentCartes(Carte[] cartes, int i, int larguer){
         StringBuilder table = new StringBuilder();
         int newLarguer = 0;
@@ -157,6 +144,19 @@ public class Carte  {
         }
         return table.toString();
     }
+
+    public static String afficherCartesGrand(Carte[] cartes, int larguer){
+        StringBuilder table = new StringBuilder();
+        for (int i = 0; i < cartes.length; i+=larguer) {
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n");
+            table.append(contentCartesGrand(cartes,i,larguer));
+            table.append(border(cartes.length,i,larguer,cartes));
+            table.append("\n\n");
+        }
+        table.append(Couleur.resetCouleur());
+        return table.toString();
+    }
     public static String contentCartesGrand(Carte[] cartes, int i, int larguer){
         StringBuilder table = new StringBuilder();
         int newLarguer = 0;
@@ -170,11 +170,11 @@ public class Carte  {
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("|  ").append(cartes[i+j].nbFigure).append("  | \t\t");
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].nbFigure).append(" | \t\t");
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture).append(" | \t\t");
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture.getAbreviation()).append(" | \t\t");
         }
         table.append("\n");
         return table.toString();
@@ -198,6 +198,39 @@ public class Carte  {
         if (c.nbFigure >= ligne){
             return c.figure.toString(c.texture.toString());
         } else return " ";
+    }
+
+    public static int[] getCouleurs(Carte[] cartes){
+        int[] couleurs = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            couleurs[i] = cartes[i].getCouleur().ordinal();
+        }
+        return couleurs;
+    }
+
+    public static int[] getNbsFigures(Carte[] cartes){
+        int[] nbsFigures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            nbsFigures[i] = cartes[i].getNbFigures();
+        }
+        return nbsFigures;
+    }
+
+
+    public static int[] getTextures(Carte[] cartes){
+        int[] textures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            textures[i] = cartes[i].getTexture().ordinal();
+        }
+        return textures;
+    }
+
+    public static int[] getFigures(Carte[] cartes){
+        int[] figures = new int[cartes.length];
+        for (int i = 0; i < cartes.length; i++) {
+            figures[i] = cartes[i].getFigure().ordinal();
+        }
+        return figures;
     }
 
 }

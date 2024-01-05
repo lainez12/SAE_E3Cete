@@ -266,7 +266,10 @@ public class Paquet {
      */
 
     public boolean estVide() {
-        return this.indiceCarteRestante < 1;
+        if (this.indiceCarteRestante < 1){
+            return true;
+        }
+        return false;
     }
 
     /**

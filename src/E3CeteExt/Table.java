@@ -1,4 +1,4 @@
-package E3CeteExt124;
+package E3CeteExt;
 
 import E3CeteBase.Carte;
 import E3CeteBase.Coordonnees;

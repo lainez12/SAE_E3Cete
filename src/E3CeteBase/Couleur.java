@@ -16,7 +16,26 @@ public enum Couleur {
     * */
     ROUGE("\u001B[31m"),
     JAUNE("\033[38;5;11m"),
-    BLEU("\u001B[34m");
+    BLEU("\u001B[34m"),
+    C4_PINK_DEEP("\033[38;5;199m"),
+    C5_SPRINGGREEN4("\033[38;5;29m"),
+    C6_TURQUOISE4("\033[38;5;30m"),
+    C7_DODGERBLUE1("\033[38;5;33m"),
+    C8_GREEN3("\033[38;5;34m"),
+    C9_FUCHSIA("\033[38;5;13m"),
+    C10_DARKRED("\033[38;5;52m"),
+    C11_GREY50("\033[38;5;244m"),
+    C12_ORANGERED1("\033[38;5;202m"),
+    C13_ORANGE3("\033[38;5;172m"),
+    C14_CHARTREUSE1("\033[38;5;118m"),
+    C15_HOTPINK("\033[38;5;205m"),
+    C16_PURPLE4("\033[38;5;55m"),
+    C17_WHITE("\033[38;5;15m"),
+    C18_OLIVE("\033[38;5;3m"),
+    C19_DARKSLATEGRAY1("\033[38;5;123m"),
+    C20_SILVER("\033[38;5;7m");
+
+
 
     private final String code;
 
@@ -32,5 +51,14 @@ public enum Couleur {
 
     public String toString(){
         return code;
+    }
+
+    public static Couleur[] values(int range){
+        Couleur[] all = Couleur.values();
+        Couleur[] nouveau = new Couleur[range];
+        for (int i = 0; i < nouveau.length; i++) {
+            nouveau[i] = all[i];
+        }
+        return nouveau;
     }
 }
