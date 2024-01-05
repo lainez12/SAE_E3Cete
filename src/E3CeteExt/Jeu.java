@@ -46,7 +46,7 @@ public class Jeu {
      */
 
     public Jeu() {
-        System.out.println("\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour la caractéristique Couleur?\"");
+        System.out.println(Couleur.bold() + "\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour la caractéristique Couleur?\"");
         int couleurs = Ut.saisirEntierMinMax(1,20);
         System.out.println("\"Et pour la caractéristique Figure? (aussi avec 20 valeurs)\"");
         int figures = Ut.saisirEntierMinMax(1,20);
