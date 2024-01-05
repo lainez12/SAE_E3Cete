@@ -198,4 +198,12 @@ public class Table {
     public void setCartesSurTable(int cartesSurTable) {
         this.cartesSurTable = cartesSurTable;
     }
+
+    public Carte[] getCartes(int[] numsCartes){
+        Carte[] cartes = new Carte[numsCartes.length];
+        for (int i = 0; i < numsCartes.length; i++) {
+            cartes[i] = this.table[numsCartes[i]];
+        }
+        return cartes;
+    }
 }
