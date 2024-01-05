@@ -68,17 +68,19 @@ public class Jeu {
      */
 
     public static boolean estUnE3C(Carte[] cartes) {
-        Carte c1 = cartes[0];
-        Carte c2 = cartes[1];
-        Carte c3 = cartes[2];
-        return attributsError(c1, c2, c3);
+        int[] couleurs = Carte.getCouleurs(cartes);
+        int[] nbFigures = Carte.getNbsFigures(cartes);
+        int[] figures = Carte.getFigures(cartes);
+        int[] textures = Carte.getTextures(cartes);
+        return attributsSansError(couleurs,nbFigures,figures,textures);
     }
 
-    public static boolean attributsError(Carte c1, Carte c2, Carte c3){
-        for (int i = 1; i < 5; i++) {
-            boolean attributs = memeAttributs(i, c1,c2,c3);
-            if (!attributs){
-                if (!diffAttributs(i,c1,c2,c3)){
+    public static boolean attributsSansError(int[] couleurs, int[] nbFigures, int[] figures, int[] textures){
+        int[][] attributsTab =  {couleurs,nbFigures,figures,textures};
+        for (int[] attributs : attributsTab) {
+            boolean attributMeme = memeAttributs(attributs);
+            if (!attributMeme){
+                if (!diffAttributs(attributs)){
                     return false;
                 }
             }
@@ -86,34 +88,26 @@ public class Jeu {
         return true;
     }
 
-    public static boolean memeAttributs(int attribut, Carte c1, Carte c2, Carte c3){
-        switch (attribut){
-            case 1:
-                return c1.getCouleur() == c2.getCouleur() && c2.getCouleur() == c3.getCouleur() && c3.getCouleur() == c1.getCouleur();
-            case 2:
-                return c1.getNbFigures() == c2.getNbFigures() && c2.getNbFigures() == c3.getNbFigures() && c3.getNbFigures() == c1.getNbFigures();
-            case 3:
-                return c1.getFigure() == c2.getFigure() && c2.getFigure() == c3.getFigure() && c3.getFigure() == c1.getFigure();
-            case 4:
-                return c1.getTexture() == c2.getTexture() && c2.getTexture() == c3.getTexture() && c3.getTexture() == c1.getTexture();
-            default:
-                return c1.compareTo(c2) == c2.compareTo(c3);
+    public static boolean memeAttributs(int[] attributs){
+        for (int i = 0; i < attributs.length; i++) {
+            for (int j = 0; j < attributs.length; j++) {
+                if (attributs[i] != attributs[j]){
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
-    public static boolean diffAttributs(int attribut, Carte c1, Carte c2, Carte c3){
-        switch (attribut){
-            case 1:
-                return c1.getCouleur() != c2.getCouleur() && c2.getCouleur() != c3.getCouleur() && c3.getCouleur() != c1.getCouleur();
-            case 2:
-                return c1.getNbFigures() != c2.getNbFigures() && c2.getNbFigures() != c3.getNbFigures() && c3.getNbFigures() != c1.getNbFigures();
-            case 3:
-                return c1.getFigure() != c2.getFigure() && c2.getFigure() != c3.getFigure() && c3.getFigure() != c1.getFigure();
-            case 4:
-                return c1.getTexture() != c2.getTexture() && c2.getTexture() != c3.getTexture() && c3.getTexture() != c1.getTexture();
-            default:
-                return c1.compareTo(c2) != c2.compareTo(c3);
+    public static boolean diffAttributs(int[] attributs){
+        for (int i = 0; i < attributs.length; i++) {
+            for (int j = 0; j < attributs.length; j++) {
+                if (attributs[i] == attributs[j] && j != i){
+                    return false;
+                }
+            }
         }
+        return true;
     }
     /**
      * Action : Recherche un E3C parmi les cartes disposées sur la table.
