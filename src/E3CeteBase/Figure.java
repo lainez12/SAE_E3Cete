@@ -58,6 +58,7 @@ public enum Figure {
         }
     }
 
+
     public String toString(){
         return defaut;
     }
@@ -70,6 +71,5 @@ public enum Figure {
         }
         return nouveau;
     }
-
 
 }

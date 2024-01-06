@@ -28,7 +28,7 @@ public class Ut {
      */
 
     public static void passerLigne() {
-        System.out.println("");
+        System.out.println();
     }
 
     public static void passerALaLigne() {
@@ -269,6 +269,112 @@ public class Ut {
         methodeSansArguments.run();
         long endTime = System.nanoTime();
         return ((endTime - startTime) / 1000000);
+    }
+
+    public static boolean estDansleTab(int num, int[] tab){
+        for (int j : tab) {
+            if (num == j) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int[] order(int[] nums){//Ext 1
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
+                if (nums[j] < nums[i]){
+                    int min = nums[j];
+                    nums[j] = nums[i];
+                    nums[i] = min;
+
+                }
+            }
+        }
+        return nums;
+    }
+
+
+
+    public static boolean estDansleRange(int min, int max, int val){
+        if (min > max ){
+            min += max;
+            max = min-max;
+            min = min-max;
+        }
+        return val <= max && val >=min;
+    }
+
+    public static int[][] effacerTabDansMatrice(int[][] tab, int j){
+        int[][] nouveau = new int[tab.length-1][tab[0].length];
+        for (int i = 0; i < j; i++) {
+            for (int k = 0; k < tab[0].length; k++) {
+                nouveau[i][k] = tab[i][k];
+            }
+        }
+        for (int i = j; i < nouveau.length; i++) {
+            for (int k = 0; k < tab[0].length; k++) {
+                nouveau[i][k] = tab[i+1][k];
+            }
+        }
+        return nouveau;
+    }
+
+    public static int[][] copieDuTab(int[][] matrice){
+        int[][] nouvelle = new int[matrice.length][matrice[0].length];
+        for (int i = 0; i < nouvelle.length; i++) {
+            for (int j = 0; j < nouvelle[0].length; j++) {
+                nouvelle[i][j] = matrice[i][j];
+            }
+        }
+        return nouvelle;
+    }
+
+    public static int[] copieDuTab(int[] matrice){
+        int[] nouvelle = new int[matrice.length];
+        for (int i = 0; i < nouvelle.length; i++) {
+                nouvelle[i] = matrice[i];
+        }
+        return nouvelle;
+    }
+
+    public static boolean estInclu(int[] tab, int x){
+        for (int valeurs : tab) {
+            if (valeurs == x) return true;
+        }
+        return false;
+    }
+
+    public static int[] ajoute(int[] tab, int x){
+        int[] nouveau = new int[tab.length+1];
+        for (int i = 0; i < tab.length; i++) {
+            nouveau[i] = tab[i];
+        }
+        nouveau[tab.length] = x;
+        return nouveau;
+    }
+
+    public static int[][] ajoute(int[][] tab, int[] x){
+        int[][] nouveau = new int[tab.length+1][tab[0].length];
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab[0].length; j++) {
+                nouveau[i][j] = tab[i][j];
+            }
+        }
+        for (int i = 0; i < x.length; i++) {
+            nouveau[tab.length][i] = x[i];
+        }
+        return nouveau;
+    }
+
+    public static int indicePlusHaut(int[] tab){
+        int maxIndice = tab[0];
+        for (int i = 1; i < tab.length; i++) {
+            if (tab[i] > tab[maxIndice]){
+                maxIndice = i;
+            }
+        }
+        return maxIndice;
     }
 
 } // end class

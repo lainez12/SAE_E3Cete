@@ -1,4 +1,4 @@
-package E3CeteExt;
+package E3CeteExt1234;
 
 import E3CeteBase.Carte;
 import E3CeteBase.Coordonnees;
@@ -25,6 +25,7 @@ public class Table {
     private Carte[] table;
     private int hauteur = 0;
     private int larguer = 0;
+    private int cartesSurTable;
 
     /**
      * Pre-requis : hauteur >=3, largeur >=3
@@ -34,8 +35,8 @@ public class Table {
      * Exemple : hauteur : 3, largeur : 3 => construit une table 3x3 (pouvant donc accueillir 9 cartes).
      */
 
-    public Table(int hauteur, int largeur){
-        this.larguer = largeur;
+    public Table(int hauteur, int larguer){
+        this.larguer = larguer;
         this.hauteur = hauteur;
         this.table = new Carte[this.getTaille()];
     }
@@ -50,6 +51,8 @@ public class Table {
         return this.larguer*this.hauteur;
     }
 
+    public boolean tableEstVide(){return this.cartesSurTable < 1; };//pour ext 1
+
     /**
      * Pre-requis : la table est pleine
      * Action : Affiche des cartes de la table sous forme de matrice
@@ -58,7 +61,7 @@ public class Table {
      */
 
     public String toString() {
-        return Carte.afficherCartes(this.table, this.larguer);
+        return Carte.afficherCartesGrand(this.table, this.larguer);
     }
 
     /**
@@ -118,7 +121,7 @@ public class Table {
         int[] cartesJouer = new int[nbCartes];
         do {
             numCarte = faireSelectionneUneCarte();
-            if (!doublons(numCarte,compteurCartes,cartesJouer)){
+            if (doublons(numCarte,compteurCartes,cartesJouer)){
                 System.out.println("Le num de carte est :" + (numCarte+1)); //delete
                 cartesJouer[compteurCartes] = numCarte;
                 compteurCartes++;
@@ -126,22 +129,41 @@ public class Table {
                 System.out.println("Error doublon, resseyez.");
             }
         } while (!(compteurCartes == nbCartes));
+        this.cartesSurTable -= compteurCartes;
         return cartesJouer;
     }
 
     public boolean doublons(int numCarte, int compteur, int[] cartes){
         for (int i = 0; i < compteur; i++) {
             if (cartes[i] == numCarte){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     //PR: cartes.length <= nbCartes possibles de stocker dans la table
     public void placeCartes(Carte[] cartes, int[] posCartes){
         for (int i = 0; i < cartes.length; i++){
             this.table[posCartes[i]] = cartes[i];
+            this.cartesSurTable++;
+        }
+    }
+
+    public void effaceCartes(int[] posCartes){
+       posCartes = Ut.order(posCartes);
+        for (int posCarte : posCartes) {
+            this.effaceCarte(posCarte);
+        }
+        Carte[] cartes = new Carte[this.table.length];
+        System.arraycopy(this.table, 0, cartes, 0, cartes.length);
+        this.table = new Carte[cartes.length-posCartes.length];
+        System.arraycopy(cartes, 0, this.table, 0, this.table.length);
+    }
+
+    public void effaceCarte(int x){
+        for (int i = x; i < this.table.length-1; i++) {
+            this.table[i] = this.table[i+1];
         }
     }
 
@@ -161,4 +183,27 @@ public class Table {
         return this.table[numCarte];
     }
 
+    public int getCartesSurTable() {
+        return this.cartesSurTable;
+    }
+
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public int getLarguer() {
+        return larguer;
+    }
+
+    public void setCartesSurTable(int cartesSurTable) {
+        this.cartesSurTable = cartesSurTable;
+    }
+
+    public Carte[] getCartes(int[] numsCartes){
+        Carte[] cartes = new Carte[numsCartes.length];
+        for (int i = 0; i < numsCartes.length; i++) {
+            cartes[i] = this.table[numsCartes[i]];
+        }
+        return cartes;
+    }
 }

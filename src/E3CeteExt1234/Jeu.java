@@ -1,11 +1,13 @@
-package E3CeteExt;
+package E3CeteExt1234;
 
 import E3CeteBase.Carte;
+import E3CeteBase.Paquet;
 import E3CeteBase.Couleur;
 import E3CeteBase.Figure;
-import E3CeteBase.Paquet;
 import E3CeteBase.Texture;
 import E3CeteBase.Ut;
+
+
 
 /**
  * La classe Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
@@ -45,9 +47,33 @@ public class Jeu {
      */
 
     public Jeu() {
-        this.paq = new Paquet(Couleur.values(3), 3, Figure.values(3), Texture.values(3));
-        this.tab = new Table(3, 3);
+        System.out.println("\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour la caractéristique Couleur?\"");
+        int couleurs = Ut.saisirEntierMinMax(1,20);
+        System.out.println("\"Et pour la caractéristique Figure? (aussi avec 20 valeurs)\"");
+        int figures = Ut.saisirEntierMinMax(1,20);
+        System.out.println("\"Et pour la caractéristique Nombre_De_Figures_Max?\"");
+        int nbF = Ut.saisirEntierMinMax(1,20);
+        System.out.println("\"Et pour la caractéristique Texture? (aussi avec 20 valeurs)\"");
+        int textures = Ut.saisirEntierMinMax(1,20);
+        this.paq = new Paquet(Couleur.values(couleurs),nbF,Figure.values(figures),Texture.values(textures));
+        int hauteur = 0;
+        int larguer = 0;
+        do {
+            System.out.println("Quel est l'hauter de votre table?");
+            hauteur = Ut.saisirEntierMinMax(1,20);
+            System.out.println("Quel est la larguer de votre table?");
+            larguer = Ut.saisirEntierMinMax(1,20);
+        }while (!this.possibleTable(hauteur,larguer));
+        this.tab = new Table(hauteur, larguer);
         this.score = 0;
+    }
+
+    private boolean possibleTable(int h, int l){
+        boolean rep = (h*l) <= (this.paq.getIndiceCarteRestante());
+        if (!rep){
+            System.out.println("La table est trop grande, Ressayez");
+        }
+        return rep;
     }
 
     /**
@@ -57,7 +83,9 @@ public class Jeu {
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
         Carte[] cartesPioches = this.paq.piocher(numerosDeCartes.length);
-        this.tab.placeCartes(cartesPioches,numerosDeCartes);
+        if (cartesPioches != null) {
+            this.tab.placeCartes(cartesPioches, numerosDeCartes);
+        } else this.tab.effaceCartes(numerosDeCartes);
     }
 
     /**
@@ -67,54 +95,56 @@ public class Jeu {
     public void resetJeu() {
         this.paq.setIndiceCarteRestante();
         this.paq.melanger();
+        this.tab = new Table(tab.getHauteur(), tab.getLarguer());
         this.score = 0;
     }
+
     /**
      * Résullat : Vrai si les cartes passées en paramètre forment un E3C.
      */
 
-public static boolean estUnE3C(Carte[] cartes) {
-            int[] couleurs = Carte.getCouleurs(cartes);
-            int[] nbFigures = Carte.getNbsFigures(cartes);
-            int[] figures = Carte.getFigures(cartes);
-            int[] textures = Carte.getTextures(cartes);
-            return attributsSansError(couleurs,nbFigures,figures,textures);
-        }
+     public static boolean estUnE3C(Carte[] cartes) {
+        int[] couleurs = Carte.getCouleurs(cartes);
+        int[] nbFigures = Carte.getNbsFigures(cartes);
+        int[] figures = Carte.getFigures(cartes);
+        int[] textures = Carte.getTextures(cartes);
+        return attributsSansError(couleurs,nbFigures,figures,textures);
+    }
 
-        public static boolean attributsSansError(int[] couleurs, int[] nbFigures, int[] figures, int[] textures){
-            int[][] attributsTab =  {couleurs,nbFigures,figures,textures};
-            for (int[] attributs : attributsTab) {
-                    boolean attributMeme = memeAttributs(attributs);
-                    if (!attributMeme){
-                            if (!diffAttributs(attributs)){
-                                    return false;
-                                }
-                        }
+    public static boolean attributsSansError(int[] couleurs, int[] nbFigures, int[] figures, int[] textures){
+        int[][] attributsTab =  {couleurs,nbFigures,figures,textures};
+        for (int[] attributs : attributsTab) {
+            boolean attributMeme = memeAttributs(attributs);
+            if (!attributMeme){
+                if (!diffAttributs(attributs)){
+                    return false;
                 }
-            return true;
+            }
         }
+        return true;
+    }
 
-        public static boolean memeAttributs(int[] attributs){
-            for (int i = 0; i < attributs.length; i++) {
-                    for (int j = 0; j < attributs.length; j++) {
-                            if (attributs[i] != attributs[j]){
-                                    return false;
-                                }
-                        }
+    public static boolean memeAttributs(int[] attributs){
+        for (int i = 0; i < attributs.length; i++) {
+            for (int j = 0; j < attributs.length; j++) {
+                if (attributs[i] != attributs[j]){
+                    return false;
                 }
-            return true;
+            }
         }
+        return true;
+    }
 
-        public static boolean diffAttributs(int[] attributs){
-            for (int i = 0; i < attributs.length; i++) {
-                    for (int j = 0; j < attributs.length; j++) {
-                            if (attributs[i] == attributs[j] && j != i){
-                                    return false;
-                                }
-                        }
+    public static boolean diffAttributs(int[] attributs){
+        for (int i = 0; i < attributs.length; i++) {
+            for (int j = 0; j < attributs.length; j++) {
+                if (attributs[i] == attributs[j] && j != i){
+                    return false;
                 }
-            return true;
+            }
         }
+        return true;
+    }
     /**
      * Action : Recherche un E3C parmi les cartes disposées sur la table.
      * Résullat :
@@ -122,20 +152,81 @@ public static boolean estUnE3C(Carte[] cartes) {
      *  - Sinon, la valeur null.
      */
 
-    public int[] chercherE3CSurTableOrdinateur() {
-        for (int i = 0; i < tab.getTaille(); i++) {
-            for (int j = 0; j < tab.getTaille(); j++) {
-                for (int k = 0; k < tab.getTaille(); k++) {
-                    Carte[] cartes = new Carte[]{tab.getCarte(i),tab.getCarte(j),tab.getCarte(k)};
-                    if (i != j && j != k && k != i){
-                        if (estUnE3C(cartes)){
-                            return new int[]{i,j,k};
-                        }
+     public int[] chercherE3COuPlusSurTableOrdinateur() {
+        int taille = tab.getCartesSurTable();
+        int[][] tousLesE3C = new int[1][3];
+        int compteurE3C = 0;
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                if (i == j) continue;
+                for (int k = 0; k < taille; k++) {
+                    if (i == k || j == k){ continue;}
+                    Carte[] cartes = this.tab.getCartes(new int[]{i,j,k});
+                    if (estUnE3C(cartes)) {
+                        tousLesE3C = Ut.ajoute(tousLesE3C,new int[]{i, j, k});
+                        compteurE3C++;
                     }
                 }
             }
         }
+        if (compteurE3C > 0){
+            tousLesE3C = effacerDuplE3C(tousLesE3C);
+            int[] taillesEXC = new int[compteurE3C];
+            for (int i = 0; i < compteurE3C; i++) {
+                taillesEXC[i] = maxDuE3C(tousLesE3C[i]).length;
+            }
+            int e3cAvecPlus = Ut.indicePlusHaut(taillesEXC);
+            return maxDuE3C(tousLesE3C[e3cAvecPlus]);
+        }
+
         return null;
+    }
+
+    public int[] maxDuE3C(int[] e3c){
+        int[] nouveau = Ut.copieDuTab(e3c);
+        int[] test = Ut.copieDuTab(nouveau);
+        do {
+            test = ajouterUnEXC(test);
+            if (test != null) nouveau = Ut.copieDuTab(test);
+        } while (test != null);
+        return nouveau;
+    }
+    public int[] ajouterUnEXC(int[] eXc){
+        int taille = tab.getCartesSurTable();
+        int[] nouveauEXC = Ut.copieDuTab(eXc);
+        for (int i = 0; i < taille; i++) {
+            if (!Ut.estInclu(eXc,i)){
+                nouveauEXC = Ut.ajoute(nouveauEXC,i);
+                Carte[] cartes = this.tab.getCartes(nouveauEXC);
+                if (estUnE3C(cartes)) return nouveauEXC;
+            }
+        }
+        return null;
+    }
+
+    public int[][] effacerDuplE3C(int[][] tousLesE3C){
+        int[][] nouvelle = Ut.copieDuTab(tousLesE3C);
+        for (int i = 0; i < tousLesE3C.length; i++) {
+            for (int j = 0; j < tousLesE3C.length; j++) {
+                if (i == j) continue;
+                if (e3cEgaux(tousLesE3C[i], tousLesE3C[j])){
+                    Ut.effacerTabDansMatrice(nouvelle,j);
+                }
+            }
+        }
+        return nouvelle;
+    }
+
+    public boolean e3cEgaux(int[] e3c1, int[] e3c2){
+        boolean[] egaux = new boolean[3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (e3c1[i] == e3c2[j]) {
+                    egaux[i] = true;
+                }
+            }
+        }
+        return egaux[0] && egaux[1] && egaux[2];
     }
 
     /**
@@ -147,9 +238,9 @@ public static boolean estUnE3C(Carte[] cartes) {
     public int[] selectionAleatoireDeCartesOrdinateur() {
         int i,j,k;
         do {
-            i = Ut.randomMinMax(0,tab.getTaille()-1);
-            j = Ut.randomMinMax(0,tab.getTaille()-1);
-            k = Ut.randomMinMax(0,tab.getTaille()-1);
+            i = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
+            j = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
+            k = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
         } while (i == j || j == k || i == k);
         return new int[]{i,j,k};
     }
@@ -159,7 +250,7 @@ public static boolean estUnE3C(Carte[] cartes) {
      */
 
     public boolean partieEstTerminee() {
-        return this.paq.estVide();
+        return this.paq.getIndiceCarteRestante() < 3 && this.tab.getCartesSurTable() < 3;
     }
 
     /**
@@ -182,6 +273,7 @@ public static boolean estUnE3C(Carte[] cartes) {
         for (int i = 0; i < 3; i++) {
             cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
         }
+
         if (estUnE3C(cartesJ)){
             System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 point.");
             this.score += 3;
@@ -191,6 +283,7 @@ public static boolean estUnE3C(Carte[] cartes) {
             this.score -= 1;
         }
         System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
+        this.tab.setCartesSurTable(tab.getCartesSurTable()-cartejoueur.length);
         piocherEtPlacerNouvellesCartes(cartejoueur);
 
     }
@@ -201,16 +294,16 @@ public static boolean estUnE3C(Carte[] cartes) {
      */
 
     public void jouerHumain() {
-        demmarreJeu();
+        demmarreTable();
         while (!partieEstTerminee()){
             jouerTourHumain();
         }
         System.out.println("Votre score final est de " + this.score);
     }
 
-    public void demmarreJeu(){
-        int[] table = new int[9];
-        for (int i = 0; i < 9; i++) {
+    public void demmarreTable(){
+        int[] table = new int[this.tab.getTaille()];
+        for (int i = 0; i < table.length; i++) {
             table[i] = i;
         }
         piocherEtPlacerNouvellesCartes(table);
@@ -229,9 +322,9 @@ public static boolean estUnE3C(Carte[] cartes) {
     public void joueurTourOrdinateur() {
         System.out.println("Le score de l'ordi est de " + this.score);
         System.out.println("La table est la suivante \n" + this.tab);
-        int[] cartesTemp = chercherE3CSurTableOrdinateur();
+        int[] cartesTemp = chercherE3COuPlusSurTableOrdinateur();
         if (cartesTemp == null){
-            System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctinne des cartes au hasard");
+            System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctionne des cartes au hasard");
             cartesTemp = selectionAleatoireDeCartesOrdinateur();
             this.tab.afficherSelection(cartesTemp);
             this.score -= 1;
@@ -242,6 +335,7 @@ public static boolean estUnE3C(Carte[] cartes) {
             this.score += 3;
         }
         System.out.println(Couleur.resetCouleur() + "\nDes nouveeles cartes remplace celle séléctioner sur la table");
+        this.tab.setCartesSurTable(tab.getCartesSurTable()-cartesTemp.length);
         piocherEtPlacerNouvellesCartes(cartesTemp);
     }
 
@@ -253,10 +347,10 @@ public static boolean estUnE3C(Carte[] cartes) {
      */
 
     public void jouerOrdinateur() {
-        demmarreJeu();
+        demmarreTable();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            Ut.pause(3500);
+            /*Ut.pause(3500);*/
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }

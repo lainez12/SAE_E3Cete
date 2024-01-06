@@ -23,6 +23,10 @@ public class Paquet {
         return indiceCarteRestante;
     }
 
+    public void setIndiceCarteRestante() {
+        this.indiceCarteRestante = this.tabCartes.length;
+    }
+
     /**
      * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
      *
@@ -244,8 +248,9 @@ public class Paquet {
                 tempTabCarte[i] = this.tabCartes[this.indiceCarteRestante - (i+1)];
             }
             this.indiceCarteRestante -= nbCartes;
+            return tempTabCarte;
         }
-        return tempTabCarte;
+        return null;
     }
 
     /**
@@ -285,9 +290,5 @@ public class Paquet {
         }
         rep.append(Couleur.resetCouleur() + "]");
         return rep.toString();
-    }
-
-    public void setIndiceCarteRestante() {
-        this.indiceCarteRestante = this.tabCartes.length;
     }
 }
