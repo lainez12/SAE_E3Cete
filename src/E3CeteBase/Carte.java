@@ -119,22 +119,19 @@ public class Carte  {
     public static String afficherCartes(Carte[] cartes, int larguer){
         StringBuilder table = new StringBuilder();
         for (int i = 0; i < cartes.length; i+=larguer) {
-            table.append(border(cartes.length,i,larguer,cartes));
+            for (int j = 0; j < larguer; j++) {
+                table.append(cartes[i + j].couleur).append("----- \t\t");
+            }
             table.append("\n");
-            table.append(contentCartes(cartes,i,larguer));
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n\n");
-        }
-        table.append(Couleur.resetCouleur());
-        return table.toString();
-    }
-    public static String afficherCartesGrand(Carte[] cartes, int larguer){
-        StringBuilder table = new StringBuilder();
-        for (int i = 0; i < cartes.length; i+=larguer) {
-            table.append(border(cartes.length,i,larguer,cartes));
-            table.append("\n");
-            table.append(contentCartesGrand(cartes,i,larguer));
-            table.append(border(cartes.length,i,larguer,cartes));
+            for (int k = 1; k < 4; k++) {
+                for (int j = 0; j < larguer; j++) {
+                    table.append(cartes[i + j].couleur).append("| ").append(printFigure(cartes[i + j], k)).append(" | \t\t");
+                }
+                table.append("\n");
+            }
+            for (int j = 0; j < larguer; j++) {
+                table.append(cartes[i + j].couleur).append("----- \t\t");
+            }
             table.append("\n\n");
         }
         table.append(Couleur.resetCouleur());
