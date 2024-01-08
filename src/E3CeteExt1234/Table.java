@@ -26,6 +26,11 @@ public class Table {
     private int hauteur = 0;
     private int larguer = 0;
     private int cartesSurTable;
+    private int[] couleursSurTable;
+    private int[] figuresSurTable;
+    private int[] texturesSurTable;
+    private int[] nbFiguresSurTable;
+
 
     /**
      * Pre-requis : hauteur >=3, largeur >=3
@@ -148,6 +153,7 @@ public class Table {
             this.table[posCartes[i]] = cartes[i];
             this.cartesSurTable++;
         }
+
     }
 
     public void effaceCartes(int[] posCartes){

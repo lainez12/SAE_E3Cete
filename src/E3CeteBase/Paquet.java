@@ -108,7 +108,7 @@ public class Paquet {
             this.tabCartes[tempi1] = carte2;
             this.tabCartes[tempi2] = carte1;
             compt ++;
-        }while (compt < 200);
+        }while (compt < this.tabCartes.length/2);
     }
 
     /**

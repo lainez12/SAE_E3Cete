@@ -160,7 +160,7 @@ public class Jeu {
             for (int j = 0; j < taille; j++) {
                 if (i == j) continue;
                 for (int k = 0; k < taille; k++) {
-                    if (i == k || j == k){ continue;}
+                    if (i == k || j == k || Ut.tabEstInclusMatrice(tousLesE3C,new int[]{i,j,k})){ continue;}
                     Carte[] cartes = this.tab.getCartes(new int[]{i,j,k});
                     if (estUnE3C(cartes)) {
                         tousLesE3C = Ut.ajoute(tousLesE3C,new int[]{i, j, k});
@@ -170,7 +170,6 @@ public class Jeu {
             }
         }
         if (compteurE3C > 0){
-            tousLesE3C = effacerDuplE3C(tousLesE3C);
             int[] taillesEXC = new int[compteurE3C];
             for (int i = 0; i < compteurE3C; i++) {
                 taillesEXC[i] = maxDuE3C(tousLesE3C[i]).length;
@@ -202,31 +201,6 @@ public class Jeu {
             }
         }
         return null;
-    }
-
-    public int[][] effacerDuplE3C(int[][] tousLesE3C){
-        int[][] nouvelle = Ut.copieDuTab(tousLesE3C);
-        for (int i = 0; i < tousLesE3C.length; i++) {
-            for (int j = 0; j < tousLesE3C.length; j++) {
-                if (i == j) continue;
-                if (e3cEgaux(tousLesE3C[i], tousLesE3C[j])){
-                    Ut.effacerTabDansMatrice(nouvelle,j);
-                }
-            }
-        }
-        return nouvelle;
-    }
-
-    public boolean e3cEgaux(int[] e3c1, int[] e3c2){
-        boolean[] egaux = new boolean[3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (e3c1[i] == e3c2[j]) {
-                    egaux[i] = true;
-                }
-            }
-        }
-        return egaux[0] && egaux[1] && egaux[2];
     }
 
     /**

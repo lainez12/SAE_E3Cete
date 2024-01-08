@@ -377,6 +377,20 @@ public class Ut {
         return maxIndice;
     }
 
+    public static boolean tabEstInclusMatrice(int[][] matrice, int[] tab){
+        for (int[] tabs : matrice) {
+            if (estInclu(tabs,tab)) return true;
+        }
+        return false;
+    }
+
+    public static boolean estInclu(int[] tab1, int[] tab2){
+        for (int i = 0; i < tab1.length; i++) {
+            if (!estInclu(tab2,tab1[i])) return false;
+        }
+        return true;
+    }
+
 } // end class
 
 
