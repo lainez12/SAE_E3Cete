@@ -31,20 +31,26 @@ public class Main {
     }
 
     public static void imprimeJeu2(){
-        String un = Couleur.aleatoire();
-        String dos = Couleur.aleatoire();
-        String tres = Couleur.aleatoire();
+        String uno;
+        String dos;
+        String tres;
+        String cuatro;
+        do {
+            uno = Couleur.aleatoire();
+            dos = Couleur.aleatoire();
+            tres = Couleur.aleatoire();
+            cuatro = Couleur.aleatoire()+Couleur.bold();
+        }while (cuatro.charAt(4) == uno.charAt(4) || cuatro.charAt(4) == dos.charAt(4) || cuatro.charAt(4) == tres.charAt(4));
         System.out.println();
-        System.out.println(Couleur.bold());
-        System.out.println(Couleur.aleatoire() + "                           ////////////////////////////////////");
-        System.out.println(Couleur.aleatoire() + "                           //                                //");
-        System.out.println(Couleur.aleatoire() + "                           //    "+un+"EEEEE  "+dos+"XX    XX    "+tres+"CCCC     "+Couleur.aleatoire() + "//");
-        System.out.println(Couleur.aleatoire() + "                           //    "+un+"E       "+dos+"X    X    "+tres+"C         "+Couleur.aleatoire() + "//");
-        System.out.println(Couleur.aleatoire() + "                           //    "+un+"EEEE     "+dos+"XXXX    "+tres+"C          "+Couleur.aleatoire() + "//");
-        System.out.println(Couleur.aleatoire() + "                           //    "+un+"E      "+dos+"X      X   "+tres+"C         "+Couleur.aleatoire() + "//");
-        System.out.println(Couleur.aleatoire() + "                           //    "+un+"EEEEE  "+dos+"XX    XX    "+tres+"CCCC     "+Couleur.aleatoire() + "//");
-        System.out.println(Couleur.aleatoire() + "                           //                                //");
-        System.out.println(Couleur.aleatoire() + "                           ////////////////////////////////////");
+        System.out.println(cuatro + "                           ////////////////////////////////////");
+        System.out.println(cuatro + "                           //                                //");
+        System.out.println(cuatro + "                           //    "+uno+"EEEEE  "+dos+"XX    XX    "+tres+"CCCC     "+cuatro + "//");
+        System.out.println(cuatro + "                           //    "+uno+"E       "+dos+"X    X    "+tres+"C         "+cuatro + "//");
+        System.out.println(cuatro + "                           //    "+uno+"EEEE     "+dos+"XXXX    "+tres+"C          "+cuatro + "//");
+        System.out.println(cuatro + "                           //    "+uno+"E      "+dos+"X      X   "+tres+"C         "+cuatro + "//");
+        System.out.println(cuatro + "                           //    "+uno+"EEEEE  "+dos+"XX    XX    "+tres+"CCCC     "+cuatro + "//");
+        System.out.println(cuatro + "                           //                                //");
+        System.out.println(cuatro + "                           ////////////////////////////////////");
         System.out.println(Couleur.resetCouleur());
     }
 

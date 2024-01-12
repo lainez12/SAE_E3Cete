@@ -48,6 +48,7 @@ public enum Couleur {
     }
     public static String bold(){return "\033[1m";}
     public static String souligne(){return "\033[4m";}
+    public static String error(){return  Couleur.ROUGE +Couleur.bold() + Couleur.souligne();}
 
     public String toString(){
         return code;

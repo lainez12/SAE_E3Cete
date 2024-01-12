@@ -50,35 +50,45 @@ public class Jeu {
 
     public Jeu() {
         System.out.println("\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour les caractéristique?\"");
-        this.exc = Ut.saisirEntierMinMax(3,20);
+        this.exc = Ut.saisirEntierMinMax(3,20); // Ext3
         this.paq = new Paquet(Couleur.values(this.exc),this.exc,Figure.values(this.exc),Texture.values(this.exc));
-        int hauteur = 0;
-        int larguer = 0;
-        do {
-            System.out.println("Quel est l'hauter de votre table?");
-            hauteur = Ut.saisirEntierMinMax(1,20);
-            System.out.println("Quel est la larguer de votre table?");
-            larguer = Ut.saisirEntierMinMax(1,20);
-        }while (!this.possibleTable(hauteur,larguer));
-        this.tab = new Table(hauteur, larguer);
+        int[] table = saisirTailleTable(); // Ext4
+        this.tab = new Table(table[0], table[1]);
         this.score = 0;
     }
 
+    public int[] saisirTailleTable(){
+        int hauteur = 0;
+        int largeur = 0;
+        do {
+            System.out.println("Quel est l'hauter de votre table?");
+            hauteur = Ut.saisirEntierMinMax(1,20);
+            System.out.println("Quel est la largeur de votre table?");
+            largeur = Ut.saisirEntierMinMax(1,20);
+        }while (!this.possibleTable(hauteur,largeur));
+        return new int[]{hauteur,largeur};
+    }
     private boolean possibleTable(int h, int l){
-        int taillePaq = this.paq.getIndiceCarteRestante();
-        boolean rep = (h*l)%this.exc == 0;
-        if (!rep){
-            System.out.println("La table n'est pas divisible par " + this.exc);
+        int p = (int) Math.pow(this.exc,4);
+        int t = h * l;
+        int r = p-t;
+        double combinaison = Ut.combinaison(t,this.exc);
+        boolean tableDivisble = t%this.exc == 0;
+        boolean resteDeCartesDivisible = r%this.exc==0;
+        boolean combinaisonPerfomance = combinaison < 200000;
+        if (!tableDivisble){
+            System.out.println(Couleur.error() + "La table n'est pas divisible avec " + this.exc + Couleur.resetCouleur());
+            return false;
         }
-        rep = (h*l) >= this.exc;
-        if (!rep){
-            System.out.println("La table est trop petit");
+        if (!resteDeCartesDivisible){
+            System.out.println(Couleur.error() + "La table n'est pas divisible avec " + this.exc + Couleur.resetCouleur());
+            return false;
         }
-        rep = (taillePaq-(h*l))%this.exc == 0;
-        if (!rep){
-            System.out.println("La quantite de cartes dans paquet n'est pas divisible par " + this.exc);
+        if (!combinaisonPerfomance){
+            System.out.println(Couleur.error() + "Les combinaisons requises pour l\'ordinateur compromettent les performances du jeu." + Couleur.resetCouleur());
+            return false;
         }
-        return rep;
+        return true;
     }
 
     /**
@@ -90,7 +100,7 @@ public class Jeu {
         Carte[] cartesPioches = this.paq.piocher(numerosDeCartes.length);
         if (cartesPioches != null) {
             this.tab.placeCartes(cartesPioches, numerosDeCartes);
-        } else this.tab.effaceCartes(numerosDeCartes);
+        } else this.tab.effaceCartes(numerosDeCartes); //Ext1
     }
 
     /**
@@ -151,9 +161,9 @@ public class Jeu {
         return true;
     }
     /**
-     * Action : Recherche un E3C parmi les cartes disposées sur la table.
+     * Action : Recherche un EXC parmi les cartes disposées sur la table.
      * Résullat :
-     *  - Si un E3C existe, un tableau contenant les numéros de cartes (de la table) qui forment un E3C.
+     *  - Si un EXC existe, un tableau contenant les numéros de cartes (de la table) qui forment un E3C.
      *  - Sinon, la valeur null.
      */
 
@@ -172,6 +182,13 @@ public class Jeu {
         return null;
     }
 
+    /**
+     * Action : Recherche un EXC parmi les cartes disposées sur la table et tabCartes{tab[0], tab[0]+1, tab[0]+2...}.
+     *          essayer toutes les combinaisons possibles avec avec tab[0] < reste des nombres < cartes sur la table
+     * Résullat :
+     *  - Si un EXC existe, un tableau contenant les numéros de cartes (de la table) qui forment un EXC.
+     *  - Sinon, la valeur null.
+     */
     public int[] chercherExCTouslesCombinaison(int[] tabCartes, int cartesSurTable){
          Carte[] cartes = this.tab.getCartes(tabCartes);
          if (estUnExC(cartes))return tabCartes;
@@ -180,6 +197,8 @@ public class Jeu {
              cartes = this.tab.getCartes(tabCartes);
              if (!Ut.tabAvecDoublons(tabCartes) && estUnExC(cartes))return tabCartes;
          }while (tabCartes[1] < cartesSurTable-1 || tabCartes[this.exc-1] < cartesSurTable-1);
+         //il s'arrete quand tab[1] == nbmax et tab[length-1] ==nbMax
+        //example {4,8,8,8} max = 8 < cartesSurTable = 9
          return null;
     }
 
@@ -312,7 +331,7 @@ public class Jeu {
         demmarreTable();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            Ut.pause(3500);
+            Ut.pause(3000);
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }

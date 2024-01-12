@@ -271,6 +271,8 @@ public class Ut {
         return ((endTime - startTime) / 1000000);
     }
 
+    //PR: Tab n'est pas vide.
+    //Return vrai ssi x est inclus dans le tab
     public static boolean estInclu(int[] tab, int x){
         for (int valeurs : tab) {
             if (valeurs == x) return true;
@@ -278,6 +280,8 @@ public class Ut {
         return false;
     }
 
+    //PR: Tab n'est pas vide.
+    //Return un tab avec les nombres de nums en order ordre croissant
     public static int[] order(int[] nums){//Ext 1
         for (int i = 0; i < nums.length; i++) {
             for (int j = i; j < nums.length; j++) {
@@ -285,7 +289,6 @@ public class Ut {
                     int min = nums[j];
                     nums[j] = nums[i];
                     nums[i] = min;
-
                 }
             }
         }
@@ -294,24 +297,25 @@ public class Ut {
 
 
 
+    //PR: min < max.
+    //Return vrai ssi val est <= max et >= min
     public static boolean estDansleRange(int min, int max, int val){
         return val <= max && val >=min;
     }
 
-
-    public static boolean estInclu(int[] tab1, int[] tab2){
-        for (int i = 0; i < tab1.length; i++) {
-            if (!estInclu(tab2,tab1[i])) return false;
-        }
-        return true;
-    }
-
+    //PR: Tab n'est pas vide.
+    //Action parcours le table depuis l'incide 1 et met dans chaque caisse le valeur dans l'indice 0 plus l'indice i
+    //Example tab{2,?,?,?} -->resulta tab{2,3,4,5}
     public static void tabSommeIetIndice0(int[] tab){
         for (int i = 1; i < tab.length; i++) {
             tab[i] = i+tab[0];
         }
     }
 
+    //PR: Tab n'est pas vide, nbMax es positif, tab[1]<nbMax.
+    //Return tab avec la valeur du dernier indice augmenté ssi il est < nbMax du contraire
+    //le dernier indice prend la valuer d'indice 0 + i et continue son parcours du tab
+    //jusqu' à trouve une caisse et pouvoir l'augmenter + 1;
     public static int[] augmDernierIndice(int[] tab, int nbMax){
         for (int i = tab.length-1; i > 0; i--) {
             if(tab[i] < nbMax){
@@ -329,6 +333,10 @@ public class Ut {
         return tab;
     }
 
+    //PR: Tab n'est pas vide.
+    //Action parcours la table et met dans une variable temp le valeur de tab[i]
+    //et dans chaque caisse le valeur de la prochine caisse, si temp est inclus dans tab retur true.
+    //Return true ssi il n'y pas des doublons de valuers dans le tab.
     public static boolean tabAvecDoublons(int[] tab){
         for (int i = 0; i < tab.length - 1; i++) {
             int temp = tab[i];
@@ -342,6 +350,20 @@ public class Ut {
         }
         return false;
     }
+
+    // Function pour calculer le factoriel du n, PR: n est positif
+    static double factoriel(int n) {
+        if (n > 1) {
+            return n * factoriel(n - 1);
+        }
+        return 1;
+    }
+
+    // Function pour calculer les combinación de nCk, PR: n>=k>0 (n et k sont positif
+    public static double combinaison(int n, int k) {
+        return factoriel(n) / (factoriel(k) * factoriel(n - k));
+    }
+
 } // end class
 
 

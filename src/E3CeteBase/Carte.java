@@ -149,11 +149,15 @@ public class Carte  {
 
     public static String afficherCartesGrand(Carte[] cartes, int larguer){
         StringBuilder table = new StringBuilder();
+        char ligne;
+        int comptuerLig = 0;
         for (int i = 0; i < cartes.length; i+=larguer) {
-            table.append(border(cartes.length,i,larguer,cartes));
+            ligne=Ut.indexToAlpha(comptuerLig);
+            comptuerLig++;
+            table.append(" \t").append(border(cartes.length,i,larguer,cartes));
             table.append("\n");
-            table.append(contentCartesGrand(cartes,i,larguer));
-            table.append(border(cartes.length,i,larguer,cartes));
+            table.append(Couleur.resetCouleur()).append(ligne).append("\t").append(contentCartesGrand(cartes,i,larguer));
+            table.append(" \t").append(border(cartes.length,i,larguer,cartes));
             table.append("\n\n");
         }
         table.append(Couleur.resetCouleur());
@@ -168,15 +172,16 @@ public class Carte  {
             newLarguer = cartes.length-i;
         }
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].figure).append(" | \t\t");
+            if (j!=0)table.append("\t");
+            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].figure).append(" | \t");
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].nbFigure).append(" | \t\t");
+            table.append("\t").append(cartes[i + j].couleur).append("| ").append(cartes[i+j].nbFigure).append(" | \t");
         }
         table.append("\n");
         for (int j = 0; j < newLarguer; j++) {
-            table.append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture.getAbreviation()).append(" | \t\t");
+            table.append("\t").append(cartes[i + j].couleur).append("| ").append(cartes[i+j].texture.getAbreviation()).append(" | \t");
         }
         table.append("\n");
         return table.toString();
