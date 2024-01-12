@@ -123,17 +123,24 @@ public class Paquet {
     public Paquet trierSelection() {
         Paquet tempPaquet = new Paquet(this);
         Carte temp;
+        int minindice;
+        int compteurOpe = 3;
         for (int i = 0; i < this.indiceCarteRestante - 1; i++) {
-            int minindice = i;
+            minindice = i;
+            compteurOpe += 2;
             for (int j = i + 1; j < this.indiceCarteRestante; j++) {
+                compteurOpe += 2;
                 if (tempPaquet.tabCartes[minindice].compareTo(tempPaquet.tabCartes[j]) == 1){
                     minindice = j;
+                    compteurOpe ++;
                 }
             }
             temp = tempPaquet.tabCartes[i];
             tempPaquet.tabCartes[i] = tempPaquet.tabCartes[minindice];
             tempPaquet.tabCartes[minindice] = temp;
+            compteurOpe += 3;
         }
+        System.out.println("Le nombre d'opérations élémentaires pour le triSelection est de: " + compteurOpe);
         return tempPaquet;
     }
 
@@ -150,15 +157,20 @@ public class Paquet {
     public Paquet trierBulles() {
         Paquet tempPaquet = new Paquet(this);
         Carte temp;
+        int compteurOpe = 2;
         for (int i = 0; i < this.indiceCarteRestante; i++){
+            compteurOpe ++;
             for (int j = 0; j < this.indiceCarteRestante - i - 1 ; j++) {
+                compteurOpe += 2;
                 if (tempPaquet.tabCartes[j].compareTo(tempPaquet.tabCartes[j + 1]) == 1){
                     temp = tempPaquet.tabCartes[j];
                     tempPaquet.tabCartes[j] = tempPaquet.tabCartes[j + 1];
                     tempPaquet.tabCartes[j + 1] = temp;
+                    compteurOpe += 3;
                 }
             }
         }
+        System.out.println("Le nombre d'opérations élémentaires pour le triBulles est de: " + compteurOpe);
         return tempPaquet;
     }
 
@@ -174,18 +186,20 @@ public class Paquet {
     public Paquet trierInsertion() {
         Paquet tempPaquet = new Paquet(this);
         Carte temp;
+        int compteurOpe = 2;
         for (int i = 1; i < this.indiceCarteRestante; i++) {
             temp = tempPaquet.tabCartes[i];
-            int j;
-            for (j = i; j > 0; j--) {
-                if (tempPaquet.tabCartes[j - 1].compareTo(temp) == 1) {
-                    tempPaquet.tabCartes[j] = tempPaquet.tabCartes[j - 1];
-                } else {
-                    break;
-                }
+            int j = i;
+            compteurOpe += 3;
+            while (j > 0 && tempPaquet.tabCartes[j - 1].compareTo(temp) == 1){
+                tempPaquet.tabCartes[j] = tempPaquet.tabCartes[j - 1];
+                j--;
+                compteurOpe += 3;
             }
             tempPaquet.tabCartes[j] = temp;
+            compteurOpe ++;
         }
+        System.out.println("Le nombre d'opérations élémentaires pour le triInsertion est de: " + compteurOpe);
         return tempPaquet;
     }
 
@@ -196,29 +210,31 @@ public class Paquet {
      * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
      */
     public static void testTris() {
-        Paquet paquetMelange = new Paquet(Couleur.values(),1, Figure.values(), Texture.values());
+        Paquet paquetMelange = new Paquet(Couleur.values(),5, Figure.values(), Texture.values());
         System.out.println("Paquet initial :");
-        System.out.println(paquetMelange.toString());
-
-        paquetMelange.melanger();
-        System.out.println("Paquet mélangé :");
         System.out.println(paquetMelange.toString());
 
         Paquet paquetTrieBulles = new Paquet(paquetMelange);
         System.out.println("Paquet bientot trié par bulles :");
         System.out.println(paquetTrieBulles.toString());
+        long tempsExec = Ut.getTempsExecution(paquetTrieBulles::trierBulles);
+        System.out.println("Le temps pour le trier est de " + tempsExec);
         System.out.println("Le paquet est trié (bulles) : ");
         System.out.println(paquetTrieBulles.trierBulles().toString());
 
         Paquet paquetTrieInsertion = new Paquet(paquetMelange);
         System.out.println("Paquet bientot trié par insertion :");
         System.out.println(paquetTrieInsertion.toString());
+        tempsExec = Ut.getTempsExecution(paquetTrieInsertion::trierInsertion);
+        System.out.println("Le temps pour le trier est de " + tempsExec);
         System.out.println("Le paquet est trié (insertion) : ");
         System.out.println(paquetTrieInsertion.trierInsertion().toString());
 
         Paquet paquetTrieSelection = new Paquet(paquetMelange);
         System.out.println("Paquet bientot trié par sélection :");
         System.out.println(paquetTrieSelection.toString());
+        tempsExec = Ut.getTempsExecution(paquetTrieSelection::trierSelection);
+        System.out.println("Le temps pour le trier est de " + tempsExec);
         System.out.println("Le paquet est trié (sélection) : ");
         System.out.println(paquetTrieSelection.trierSelection().toString());
     }
