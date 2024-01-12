@@ -298,34 +298,12 @@ public class Ut {
         return val <= max && val >=min;
     }
 
-    public static int indicePlusHaut(int[] tab){
-        int maxIndice = tab[0];
-        for (int i = 1; i < tab.length; i++) {
-            if (tab[i] > tab[maxIndice]){
-                maxIndice = i;
-            }
-        }
-        return maxIndice;
-    }
-
-    public static boolean tabEstInclusMatrice(int[][] matrice, int[] tab){
-        for (int[] tabs : matrice) {
-            if (estInclu(tabs,tab)) return true;
-        }
-        return false;
-    }
 
     public static boolean estInclu(int[] tab1, int[] tab2){
         for (int i = 0; i < tab1.length; i++) {
             if (!estInclu(tab2,tab1[i])) return false;
         }
         return true;
-    }
-
-    public static void initialiserTabNull(int[] tab){
-        for (int i = 0; i < tab.length; i++) {
-            tab[i] = -1;
-        }
     }
 
     public static void tabSommeIetIndice0(int[] tab){

@@ -254,7 +254,7 @@ public static boolean estUnE3C(Carte[] cartes) {
         demmarreJeu();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            /*Ut.pause(3500);*/
+            Ut.pause(3500);
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }

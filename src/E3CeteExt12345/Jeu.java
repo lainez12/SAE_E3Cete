@@ -212,7 +212,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        return this.paq.getIndiceCarteRestante() < this.exc && this.tab.getCartesSurTable() < this.exc;
+        return this.paq.estVide() && this.tab.getCartesSurTable() < this.exc;
     }
 
     /**
@@ -312,7 +312,7 @@ public class Jeu {
         demmarreTable();
         while (!partieEstTerminee()){
             joueurTourOrdinateur();
-            /*Ut.pause(3500);*/
+            Ut.pause(3500);
         }
         System.out.println("LE score final de l'ordi est de " + this.score);
     }
