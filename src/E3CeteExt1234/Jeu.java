@@ -7,6 +7,7 @@ import E3CeteBase.Figure;
 import E3CeteBase.Texture;
 import E3CeteBase.Ut;
 
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -39,6 +40,7 @@ public class Jeu {
     private Paquet paq;
     private Table tab;
     private int score;
+    private int exc = 0;
 
     /**
      * Action :
@@ -47,15 +49,9 @@ public class Jeu {
      */
 
     public Jeu() {
-        System.out.println("\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour la caractéristique Couleur?\"");
-        int couleurs = Ut.saisirEntierMinMax(1,20);
-        System.out.println("\"Et pour la caractéristique Figure? (aussi avec 20 valeurs)\"");
-        int figures = Ut.saisirEntierMinMax(1,20);
-        System.out.println("\"Et pour la caractéristique Nombre_De_Figures_Max?\"");
-        int nbF = Ut.saisirEntierMinMax(1,20);
-        System.out.println("\"Et pour la caractéristique Texture? (aussi avec 20 valeurs)\"");
-        int textures = Ut.saisirEntierMinMax(1,20);
-        this.paq = new Paquet(Couleur.values(couleurs),nbF,Figure.values(figures),Texture.values(textures));
+        System.out.println("\"Combien de valeurs souhaitez-vous sélectionner parmi les 20 pour les caractéristique?\"");
+        this.exc = Ut.saisirEntierMinMax(3,20);
+        this.paq = new Paquet(Couleur.values(this.exc),this.exc,Figure.values(this.exc),Texture.values(this.exc));
         int hauteur = 0;
         int larguer = 0;
         do {
@@ -69,9 +65,18 @@ public class Jeu {
     }
 
     private boolean possibleTable(int h, int l){
-        boolean rep = (h*l) <= (this.paq.getIndiceCarteRestante());
+        int taillePaq = this.paq.getIndiceCarteRestante();
+        boolean rep = (h*l)%this.exc == 0;
         if (!rep){
-            System.out.println("La table est trop grande, Ressayez");
+            System.out.println("La table n'est pas divisible par " + this.exc);
+        }
+        rep = (h*l) >= this.exc;
+        if (!rep){
+            System.out.println("La table est trop petit");
+        }
+        rep = (taillePaq-(h*l))%this.exc == 0;
+        if (!rep){
+            System.out.println("La quantite de cartes dans paquet n'est pas divisible par " + this.exc);
         }
         return rep;
     }
@@ -103,7 +108,7 @@ public class Jeu {
      * Résullat : Vrai si les cartes passées en paramètre forment un E3C.
      */
 
-     public static boolean estUnE3C(Carte[] cartes) {
+     public static boolean estUnExC(Carte[] cartes) {
         int[] couleurs = Carte.getCouleurs(cartes);
         int[] nbFigures = Carte.getNbsFigures(cartes);
         int[] figures = Carte.getFigures(cartes);
@@ -152,55 +157,30 @@ public class Jeu {
      *  - Sinon, la valeur null.
      */
 
-     public int[] chercherE3COuPlusSurTableOrdinateur() {
+     public int[] chercherExCSurTableOrdinateur() {
         int taille = tab.getCartesSurTable();
-        int[][] tousLesE3C = new int[1][3];
-        int compteurE3C = 0;
-        for (int i = 0; i < taille; i++) {
-            for (int j = 0; j < taille; j++) {
-                if (i == j) continue;
-                for (int k = 0; k < taille; k++) {
-                    if (i == k || j == k || Ut.tabEstInclusMatrice(tousLesE3C,new int[]{i,j,k})){ continue;}
-                    Carte[] cartes = this.tab.getCartes(new int[]{i,j,k});
-                    if (estUnE3C(cartes)) {
-                        tousLesE3C = Ut.ajoute(tousLesE3C,new int[]{i, j, k});
-                        compteurE3C++;
-                    }
-                }
+        System.out.println("Cartes sur Table " + taille);
+        int[] exc = new int[this.exc];
+        for (int i = 0; i <= taille-this.exc; i++) {
+            exc[0] = i;
+            Ut.tabSommeIetIndice0(exc);
+            if (chercherExCTouslesCombinaison(exc,taille) != null){
+                return exc;
             }
-        }
-        if (compteurE3C > 0){
-            int[] taillesEXC = new int[compteurE3C];
-            for (int i = 0; i < compteurE3C; i++) {
-                taillesEXC[i] = maxDuE3C(tousLesE3C[i]).length;
-            }
-            int e3cAvecPlus = Ut.indicePlusHaut(taillesEXC);
-            return maxDuE3C(tousLesE3C[e3cAvecPlus]);
         }
 
         return null;
     }
 
-    public int[] maxDuE3C(int[] e3c){
-        int[] nouveau = Ut.copieDuTab(e3c);
-        int[] test = Ut.copieDuTab(nouveau);
-        do {
-            test = ajouterUnEXC(test);
-            if (test != null) nouveau = Ut.copieDuTab(test);
-        } while (test != null);
-        return nouveau;
-    }
-    public int[] ajouterUnEXC(int[] eXc){
-        int taille = tab.getCartesSurTable();
-        int[] nouveauEXC = Ut.copieDuTab(eXc);
-        for (int i = 0; i < taille; i++) {
-            if (!Ut.estInclu(eXc,i)){
-                nouveauEXC = Ut.ajoute(nouveauEXC,i);
-                Carte[] cartes = this.tab.getCartes(nouveauEXC);
-                if (estUnE3C(cartes)) return nouveauEXC;
-            }
-        }
-        return null;
+    public int[] chercherExCTouslesCombinaison(int[] tabCartes, int cartesSurTable){
+         Carte[] cartes = this.tab.getCartes(tabCartes);
+         if (estUnExC(cartes))return tabCartes;
+         do {
+             Ut.augmDernierIndice(tabCartes,cartesSurTable-1);
+             cartes = this.tab.getCartes(tabCartes);
+             if (!Ut.tabAvecDoublons(tabCartes) && estUnExC(cartes))return tabCartes;
+         }while (tabCartes[1] < cartesSurTable-1 || tabCartes[this.exc-1] < cartesSurTable-1);
+         return null;
     }
 
     /**
@@ -210,13 +190,21 @@ public class Jeu {
      */
 
     public int[] selectionAleatoireDeCartesOrdinateur() {
-        int i,j,k;
-        do {
-            i = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
-            j = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
-            k = Ut.randomMinMax(0,tab.getCartesSurTable()-1);
-        } while (i == j || j == k || i == k);
-        return new int[]{i,j,k};
+        int[] selection = new int[this.exc];
+        int cartesTable = tab.getCartesSurTable()-1;
+        if (this.exc == cartesTable+1){
+            selection[0] = 0;
+            Ut.tabSommeIetIndice0(selection);
+            return selection;
+        }
+        for (int i = 0; i < this.exc; i++) {
+            int essaie;
+            do {
+                essaie = Ut.randomMinMax(0,cartesTable);
+            } while (Ut.estInclu(selection,essaie));
+            selection[i] = essaie;
+        }
+        return selection;
     }
 
     /**
@@ -224,7 +212,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        return this.paq.getIndiceCarteRestante() < 3 && this.tab.getCartesSurTable() < 3;
+        return this.paq.getIndiceCarteRestante() < this.exc && this.tab.getCartesSurTable() < this.exc;
     }
 
     /**
@@ -240,15 +228,15 @@ public class Jeu {
     public void jouerTourHumain() {
         System.out.println("Votre score est de " + this.score);
         System.out.println("La table est la suivante \n" + this.tab);
-        System.out.println(Couleur.resetCouleur() + "veuillez séléctioner 3 cartes pour tenter de réaliser un E3C.");
-        int[] cartejoueur = this.tab.selectionnerCartesJoueur(3);
+        System.out.println(Couleur.resetCouleur() + "veuillez séléctioner "+ this.exc +" cartes pour tenter de réaliser un E3C.");
+        int[] cartejoueur = this.tab.selectionnerCartesJoueur(this.exc);
         Carte[] cartesJ = new Carte[3];
         this.tab.afficherSelection(cartejoueur);
         for (int i = 0; i < 3; i++) {
             cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
         }
 
-        if (estUnE3C(cartesJ)){
+        if (estUnExC(cartesJ)){
             System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 point.");
             this.score += 3;
         }
@@ -296,7 +284,7 @@ public class Jeu {
     public void joueurTourOrdinateur() {
         System.out.println("Le score de l'ordi est de " + this.score);
         System.out.println("La table est la suivante \n" + this.tab);
-        int[] cartesTemp = chercherE3COuPlusSurTableOrdinateur();
+        int[] cartesTemp = chercherExCSurTableOrdinateur();
         if (cartesTemp == null){
             System.out.println(Couleur.resetCouleur() + "\nL'ordi n'a pas trouvé de E3C donc il séléctionne des cartes au hasard");
             cartesTemp = selectionAleatoireDeCartesOrdinateur();
@@ -343,18 +331,160 @@ public class Jeu {
 
     public void jouer() {
         int rep = 0;
+        int difficulter = 0;
         do{
-            System.out.println(Couleur.bold() + Couleur.BLEU + "tapez 1 pour jouer \n"+ Couleur.JAUNE+ "tapez 2 pour que l'ordi joue \n" + Couleur.ROUGE + "tapez 3 pour mettre fin au programe" + Couleur.resetCouleur());
-            rep = Ut.saisirEntierMinMax(1,3);
+            System.out.println(Couleur.bold() + Couleur.BLEU + "tapez 1 pour jouer \n"+ Couleur.JAUNE+ "tapez 2 pour que l'ordi joue \n" +Couleur.C8_GREEN3 + "tapez 3 pour jouer avec du temps \n" + Couleur.ROUGE + "tapez 4 pour mettre fin au programe" + Couleur.resetCouleur());
+            rep = Ut.saisirEntierMinMax(1,4);
             if (rep == 1){
                 jouerHumain();
             }
             else if (rep == 2) {
                 jouerOrdinateur();
             }
+            else if (rep == 3){
+                System.out.println( Couleur.bold() + Couleur.C9_FUCHSIA + "tapez 1 pour la verssion 1(temps partie)\n" + Couleur.C4_PINK_DEEP + "tapez 2 pour la verssion 2(temps au tour)" + Couleur.resetCouleur());
+                rep = Ut.saisirEntierMinMax(1,2);
+                System.out.println(Couleur.bold() + Couleur.C19_DARKSLATEGRAY1 + "Sélectioner votre niveau de difficulter en tapant " + Couleur.ROUGE + "1 pour facile, " + Couleur.JAUNE + "2 pour moyen et " + Couleur.C15_HOTPINK + "3 pour difficile" + Couleur.resetCouleur());
+                difficulter = Ut.saisirEntierMinMax(1,3);
+                if (rep == 1){
+                    jouerHumainTempsPartie(difficulter);
+                } else if (rep == 2) {
+                    jouerHumainTempsTours(difficulter);
+                }
+            }
             resetJeu();
-        }while (rep != 3);
+        }while (rep != 4);
         System.out.println("Merci d'avoir joué a notre jeu");
+    }
+
+
+    public void jouerTourHumainTempsPartie() {
+        System.out.println("Votre score est de " + this.score);
+        System.out.println("La table est la suivante \n" + this.tab);
+
+
+        System.out.println("Coisissez entre \n tenter une E3C en tapant 1 \n remplacer une carte en tapant 2");
+        int choixJoueur = Ut.saisirEntierMinMax(1, 2);
+        if (choixJoueur == 1) {
+            System.out.println(Couleur.resetCouleur() + "veuillez séléctioner "+ this.exc +" cartes pour tenter de réaliser un E3C.");
+            int[] cartejoueur = this.tab.selectionnerCartesJoueur(this.exc);
+            Carte[] cartesJ = new Carte[3];
+            this.tab.afficherSelection(cartejoueur);
+            for (int i = 0; i < 3; i++) {
+                cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
+            }
+            if (estUnExC(cartesJ)) {
+                System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 points.");
+                this.score += 3;
+                System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
+                piocherEtPlacerNouvellesCartes(cartejoueur);
+            } else {
+                System.out.println(Couleur.resetCouleur() + "\nDommage ce n'est pas un E3C \n Vous perdez 3 points.");
+                this.score -= 3;
+            }
+        }
+        else {
+            System.out.println("Séléctionez la carte que vous voulez remplacer");
+            int[] carteRemplacer = this.tab.selectionnerCartesJoueur(1);
+            piocherEtPlacerNouvellesCartes(carteRemplacer);
+        }
+    }
+
+
+    public void jouerHumainTempsPartie(int difficulter) {
+        demmarreTable();
+        int tempsPartie;
+        int tempScore = this.score;
+        if (difficulter == 1){
+            tempsPartie = 15 * 60;
+        } else if (difficulter == 2){
+            tempsPartie = 10 * 60;
+        }
+        else {
+            tempsPartie = 5 * 60;
+        }
+        long secondes = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long secondes2 = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long tempsDeLaPartie = secondes2 - secondes;
+        System.out.println(" Le temps de la parti est de " + tempsPartie + " seconde");
+        long tempsRestant = tempsPartie - tempsDeLaPartie;
+        while (!partieEstTerminee() && tempsDeLaPartie < tempsPartie){
+            System.out.println(" il vous reste " + tempsRestant + " seconde dans la partie");
+            tempScore = this.score;
+            jouerTourHumainTempsPartie();
+            secondes2 = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+            tempsDeLaPartie = secondes2 - secondes;
+            if (tempsDeLaPartie > tempsPartie){
+                this.score = tempScore;
+                System.out.println("Le temps de la partie est terminée");
+            }
+            tempsRestant = tempsPartie - tempsDeLaPartie;
+        }
+        System.out.println("il vous restez " + tempsRestant + " seconde");
+        System.out.println("Votre score final est de " + this.score);
+    }
+
+
+    public void jouerTourHumainTempsTours() {
+        System.out.println("Votre score est de " + this.score);
+        System.out.println("La table est la suivante \n" + this.tab);
+
+
+        System.out.println("Coisissez entre \n tenter une E3C en tapant 1 \n remplacer une carte en tapant 2");
+        int choixJoueur = Ut.saisirEntierMinMax(1, 2);
+        if (choixJoueur == 1) {
+            System.out.println(Couleur.resetCouleur() + "veuillez séléctioner "+ this.exc +" cartes pour tenter de réaliser un E3C.");
+            int[] cartejoueur = this.tab.selectionnerCartesJoueur(this.exc);
+            Carte[] cartesJ = new Carte[3];
+            this.tab.afficherSelection(cartejoueur);
+            for (int i = 0; i < 3; i++) {
+                cartesJ[i] = this.tab.getCarte(cartejoueur[i]);
+            }
+            if (estUnExC(cartesJ)) {
+                System.out.println("Bravo vous avez réaliser un E3C. \nVous gagner donc 3 points.");
+                this.score += 3;
+                System.out.println("Des nouveeles cartes remplace celle séléctioner sur la table");
+                piocherEtPlacerNouvellesCartes(cartejoueur);
+            } else {
+                System.out.println(Couleur.resetCouleur() + "\nDommage ce n'est pas un E3C \n La partie se termine");
+                this.score -= 1;
+            }
+        }
+        else {
+            System.out.println("Séléctionez la carte que vous voulez remplacer");
+            int[] carteRemplacer = this.tab.selectionnerCartesJoueur(1);
+            piocherEtPlacerNouvellesCartes(carteRemplacer);
+        }
+    }
+
+    public void jouerHumainTempsTours(int difficulter) {
+        demmarreTable();
+        int tempsTours;
+        int tempScore = this.score;
+        if (difficulter == 1){
+            tempsTours = 45;
+        } else if (difficulter == 2){
+            tempsTours = 30;
+        }
+        else {
+            tempsTours = 15;
+        }
+        long secondes = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long secondes2 = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long tempsDuTours = secondes - secondes2;
+        System.out.println("Le temps du tours est de " + tempsTours + " seconde");
+        while (!partieEstTerminee() && tempsDuTours < tempsTours && tempScore <= this.score){
+            secondes2 = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+            tempScore = this.score;
+            jouerTourHumainTempsTours();
+            secondes = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+            tempsDuTours = secondes - secondes2;
+            if (tempsDuTours > tempsTours){
+                this.score = tempScore;
+                System.out.println("Vous avez depassé la limite de temps");
+            }
+        }
+        System.out.println("Votre score final est de " + this.score);
     }
 }
 

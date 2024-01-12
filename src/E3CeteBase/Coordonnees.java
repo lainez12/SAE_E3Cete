@@ -26,7 +26,6 @@ public class Coordonnees {
      */
     public Coordonnees(String input) {
         if (formatEstValide(input)){
-            input = ext2(input);
             String[] splited = input.split(",");
             //splitted est un tableau de String qui contient les sous chaines de caracteres contenues dans input et séparées par ','
             this.x = Integer.parseInt(splited[0]);
@@ -59,24 +58,8 @@ public class Coordonnees {
         if (input.length() != 3 || input.charAt(1) != ','){
             return false;
         }
-        input = ext2(input);
         String x = String.valueOf(input.charAt(0));
         String y = String.valueOf(input.charAt(2));
         return Ut.estNombre(x) && Ut.estNombre(y);
-    }
-
-    public static String ext2(String input){
-        String y = String.valueOf(input.charAt(2));
-        String x = String.valueOf(input.charAt(0));
-        if (!Ut.estNombre(x)){
-            x.toLowerCase();
-            char c = x.charAt(0);
-            if (Ut.estDansleRange(0,20,Ut.alphaToIndex(c))){
-                int a = Ut.alphaToIndex(c)+1;
-                x = "" + a;
-                input = x + "," + y;
-            }
-        }
-        return input;
     }
 }

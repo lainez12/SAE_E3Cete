@@ -95,10 +95,26 @@ public class Table {
         do {
             System.out.println("Veuillez saisir le coordonnes de la carte à selectioner (example: 1,1)");
             input = Ut.saisirChaine();
+            input = ext2(input);
             carteCoordonnes =  new Coordonnees(input);
         } while (!Coordonnees.formatEstValide(input) || !carteExiste(carteCoordonnes));
 
         return numCarte(carteCoordonnes);
+    }
+
+    public static String ext2(String input){
+        String y = String.valueOf(input.charAt(2));
+        String x = String.valueOf(input.charAt(0));
+        if (!Ut.estNombre(x)){
+            x.toLowerCase();
+            char c = x.charAt(0);
+            if (Ut.estDansleRange(0,20,Ut.alphaToIndex(c))){
+                int a = Ut.alphaToIndex(c)+1;
+                x = "" + a;
+                input = x + "," + y;
+            }
+        }
+        return input;
     }
 
     //PR: Carte Exite dans la table; Action : retourne le nombre de carte dans le tableu de this

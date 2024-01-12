@@ -61,4 +61,10 @@ public enum Couleur {
         }
         return nouveau;
     }
+
+    public static String aleatoire(){
+        Couleur[] all = Couleur.values();
+        int rep = Ut.randomMinMax(0,19);
+        return all[rep].toString();
+    }
 }
