@@ -72,6 +72,7 @@ public class Jeu {
         int p = (int) Math.pow(this.exc,4);
         int t = h * l;
         int r = p-t;
+        int continu;
         double combinaison = Ut.combinaison(t,this.exc);
         boolean tableDivisble = t%this.exc == 0;
         boolean resteDeCartesDivisible = r%this.exc==0;
@@ -85,8 +86,9 @@ public class Jeu {
             return false;
         }
         if (!combinaisonPerfomance){
-            System.out.println(Couleur.error() + "Les combinaisons requises pour l\'ordinateur compromettent les performances du jeu." + Couleur.resetCouleur());
-            return false;
+            System.out.println(Couleur.error() + "Les combinaisons requises pour l'ordinateur compromettent les performances du jeu. Voulez vous continuez 1 oui, 2 non?" + Couleur.resetCouleur());
+            continu = Ut.saisirEntierMinMax(1,2);
+            return continu == 1;
         }
         return true;
     }
